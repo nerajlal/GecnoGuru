@@ -1,0 +1,229 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Syam Lal - Academic CV</title>
+        <style>
+            /* Base Print Styles */
+            @page {
+                size: A4;
+                margin: 15mm 10mm;
+            }
+            body {
+                font-family: 'Georgia', serif;
+                line-height: 1.5;
+                width: 210mm;
+                margin: 0 auto;
+                padding: 12mm;
+                color: #222;
+                font-size: 11pt;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* Header Styles */
+            header {
+                text-align: center;
+                margin-bottom: 8mm;
+                padding-bottom: 4mm;
+                border-bottom: 1px solid #2c3e50;
+            }
+            h1 {
+                font-size: 18pt;
+                margin: 0 0 3px 0;
+                color: #2c3e50;
+                font-weight: normal;
+                letter-spacing: 0.5px;
+            }
+            .header-subtitle {
+                font-size: 14pt;
+                margin: 0 0 8px 0;
+                color: #555;
+                font-weight: normal;
+                font-style: italic;
+            }
+            .contact-info {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin: 6px 0;
+                font-size: 10pt;
+            }
+            
+            /* Section Styles */
+            .section {
+                margin-bottom: 6mm;
+                page-break-inside: avoid;
+            }
+            .section-title {
+                font-size: 14pt;
+                color: #2c3e50;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 2px;
+                margin: 6mm 0 3mm 0;
+                font-variant: small-caps;
+                letter-spacing: 1px;
+            }
+            
+            /* Publication/Item Styles */
+            .publication, .achievement {
+                margin-bottom: 5mm;
+            }
+            .publication-title, .achievement-title {
+                font-size: 12pt;
+                margin: 0 0 2px 0;
+                font-weight: bold;
+            }
+            .publication-meta, .achievement-meta {
+                font-style: italic;
+                margin: 0 0 4px 0;
+                font-size: 10pt;
+                color: #555;
+            }
+            
+            /* Lists & Skills */
+            ul {
+                padding-left: 5mm;
+                margin: 3px 0;
+                list-style-type: square;
+            }
+            li {
+                margin-bottom: 2px;
+                font-size: 10.5pt;
+            }
+            .skills-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                margin-bottom: 3mm;
+            }
+            .skill {
+                background-color: #f5f5f5;
+                padding: 2px 8px;
+                border-radius: 2px;
+                font-size: 10pt;
+            }
+            
+            /* Print Button (Screen Only) */
+            .print-btn {
+                display: none;
+                text-align: center;
+                margin: 15px auto;
+                padding: 8px 20px;
+                background: #2c3e50;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                font-family: 'Arial', sans-serif;
+            }
+            
+            /* Screen-Specific Styles */
+            @media screen {
+                body {
+                    background: #f9f9f9;
+                    padding: 15mm;
+                }
+                .print-btn {
+                    display: block;
+                }
+            }
+            
+            /* Compact Mode for Printing */
+            @media print {
+                body {
+                    padding: 12mm 8mm;
+                }
+                .section {
+                    margin-bottom: 4mm;
+                }
+                a {
+                    text-decoration: none;
+                    color: inherit;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button class="print-btn" onclick="window.print()">Print CV</button>
+
+        <header>
+            <h1>Syam Lal</h1>
+            <div class="header-subtitle">Java Developer</div>
+            <div class="contact-info">
+                <span>syam@gmail.com</span>
+                <span>•</span>
+                <span>08547470675</span>
+                                    <span>•</span>
+                    <span>lal bhavan Mukkoodu p.o Mulavana</span>
+                            </div>
+            <div class="contact-info">
+                                    <span>LinkedIn: https://linked.in/nerajlal</span>
+                                                    <span>•</span>
+                    <span>GitHub: https://github.com/nerajlal</span>
+                            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">Research Profile</h2>
+            <p>bw ck w cjk wc ewj cw</p>
+        </section>
+
+        
+        
+                <section class="section">
+            <h2 class="section-title">Education</h2>
+                            <div class="publication">
+                    <div class="publication-title">Master's</div>
+                    <div class="publication-meta">
+                        Snit | 
+                        2024 | 
+                        GPA: 85.00%
+                    </div>
+                </div>
+                    </section>
+        
+                <section class="section">
+            <h2 class="section-title">Research Experience</h2>
+                            <div class="publication">
+                    <div class="publication-title">Web Developer</div>
+                    <div class="publication-meta">
+                        Serve Techno Research | 
+                        2024-03-25 - 2025-03-25                                                    | Kollam                                            </div>
+                                            <ul>
+                                                                <li>dfsdfsd sdf sd  dsf</li>
+                                                        </ul>
+                                    </div>
+                    </section>
+        
+                <section class="section">
+            <h2 class="section-title">Research Projects & Publications</h2>
+                            <div class="publication">
+                    <div class="publication-title">Serve The Needy</div>
+                                            <div class="publication-meta">Techniques: MongoDB, React, Express, Node</div>
+                                        <div class="publication-meta">
+                                                    2024-03-25 - 2025-03-25                                                                            | <a href="https://personalprofile.com">Full Text</a>
+                                            </div>
+                                            <ul>
+                                                                <li>dcsdsd f sd f sdf sdf sd fsd</li>
+                                                        </ul>
+                                    </div>
+                    </section>
+        
+                <section class="section">
+            <h2 class="section-title">Research Interests</h2>
+            <p>
+                Singinig (fg  f f sd f d fd sf sdf).
+            </p>
+        </section>
+        
+        <script>
+            // Auto-print when coming from view_resume.php with print parameter
+            if(window.location.search.includes('print=1')) {
+                window.print();
+            }
+        </script>
+    </body>
+    </html>
+    

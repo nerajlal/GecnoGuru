@@ -1,0 +1,129 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Professional Resume</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                line-height: 1.6; 
+                max-width: 800px; 
+                margin: 0 auto; 
+                padding: 20px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+            .section { margin-bottom: 20px; }
+            .section-title { 
+                border-bottom: 2px solid #333; 
+                padding-bottom: 5px;
+                color: #2c3e50;
+            }
+            .job-title, .education-details { margin-bottom: 10px; }
+            .skills-list { display: flex; flex-wrap: wrap; gap: 10px; }
+            .skill-item { 
+                background: #f0f0f0; 
+                padding: 5px 10px; 
+                border-radius: 3px;
+                font-size: 14px;
+            }
+            .download-btn {
+                display: block;
+                text-align: center;
+                margin: 20px auto;
+                padding: 10px 20px;
+                background: #2c3e50;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                width: 200px;
+            }
+            @media print {
+                .download-btn {
+                    display: none;
+                }
+                body {
+                    padding: 0;
+                    font-size: 12pt;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <a href="#" class="download-btn" onclick="window.print()">Download/Print Resume</a>
+
+        <header>
+            <h1>Syam Lal</h1>
+            <p>
+                syam@gmail.com | 
+                08547470675 | 
+                Java Developer            </p>
+                            <p>LinkedIn: https://linked.in/nerajlal</p>
+                                        <p>GitHub: https://github.com/nerajlal</p>
+                    </header>
+
+        <section class="section">
+            <h2 class="section-title">Professional Summary</h2>
+            <p>bw ck w cjk wc ewj cw</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-list">
+                            </div>
+        </section>
+
+        
+        <section class="section">
+            <h2 class="section-title">Professional Experience</h2>
+                            <div class="job-title">
+                    <strong>Web Developer</strong> | 
+                    Serve Techno Research                    <br>
+                    2024-03-25 - 
+                    2025-03-25                                            | Kollam                                    </div>
+                                    <ul>
+                                                        <li>dfsdfsd sdf sd  dsf</li>
+                                                </ul>
+                                    </section>
+
+        <section class="section">
+            <h2 class="section-title">Education</h2>
+                            <div class="education-details">
+                    <strong>Master's</strong> | 
+                    Snit                    <br>
+                    Graduation Year: 2024 | 
+                    Percentage: 85.00%
+                </div>
+                    </section>
+
+                <section class="section">
+            <h2 class="section-title">Projects</h2>
+                            <div class="project">
+                    <strong>Serve The Needy</strong>
+                                            (MongoDB, React, Express, Node)
+                                        <br>
+                                            2024-03-25 - 
+                        2025-03-25                                                                | <a href="https://personalprofile.com">View Project</a>
+                                                                <ul>
+                                                                <li>dcsdsd f sd f sdf sdf sd fsd</li>
+                                                        </ul>
+                                    </div>
+                    </section>
+        
+                <section class="section">
+            <h2 class="section-title">Hobbies & Interests</h2>
+            <ul>
+                                    <li>
+                        <strong>Singinig</strong>
+                                                    - fg  f f sd f d fd sf sdf                                            </li>
+                            </ul>
+        </section>
+        
+        <a href="#" class="download-btn" onclick="window.print()">Download/Print Resume</a>
+    </body>
+    </html>
+    

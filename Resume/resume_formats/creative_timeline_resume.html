@@ -1,0 +1,235 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Syam Lal - Resume</title>
+        <style>
+            @page {
+                size: A4;
+                margin: 15mm 10mm;
+            }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.5;
+                width: 210mm;
+                margin: 0 auto;
+                padding: 10mm;
+                color: #333;
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .timeline {
+                position: relative;
+                padding: 20px 0;
+            }
+            .timeline::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 20px;
+                width: 2px;
+                background: #ddd;
+            }
+            .timeline-item {
+                padding: 15px 15px 15px 50px;
+                position: relative;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+            .timeline-item::before {
+                content: '';
+                width: 12px;
+                height: 12px;
+                background: #3498db;
+                position: absolute;
+                left: 15px;
+                top: 20px;
+                border-radius: 50%;
+                border: 2px solid white;
+                box-shadow: 0 0 0 2px #3498db;
+            }
+            .timeline-item.achievement::before {
+                background: #2ecc71;
+                box-shadow: 0 0 0 2px #2ecc71;
+            }
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #3498db;
+            }
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 5px;
+                font-size: 24pt;
+            }
+            .header-subtitle {
+                color: #7f8c8d;
+                margin-bottom: 15px;
+                font-size: 14pt;
+            }
+            .contact-info {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-bottom: 10px;
+                font-size: 11pt;
+            }
+            .section-title {
+                color: #2c3e50;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 5px;
+                margin: 25px 0 15px;
+                font-size: 16pt;
+            }
+            .skills-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            .skill-tag {
+                background: #f0f0f0;
+                padding: 4px 10px;
+                border-radius: 3px;
+                font-size: 10pt;
+            }
+            ul {
+                padding-left: 20px;
+                margin: 10px 0;
+            }
+            li {
+                margin-bottom: 5px;
+            }
+            .date-badge {
+                background: #f0f0f0;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 10pt;
+                margin-right: 8px;
+            }
+            .print-btn {
+                display: none;
+            }
+            @media screen {
+                .print-btn {
+                    display: block;
+                    text-align: center;
+                    margin: 20px auto;
+                    padding: 8px 20px;
+                    background: #3498db;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+                body {
+                    background: #f9f9f9;
+                }
+                .timeline-item {
+                    background: white;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button class="print-btn" onclick="window.print()">Print Resume</button>
+
+        <header>
+            <h1>Syam Lal</h1>
+            <div class="header-subtitle">Java Developer</div>
+            <div class="contact-info">
+                <span>syam@gmail.com</span>
+                <span>•</span>
+                <span>08547470675</span>
+                                    <span>•</span>
+                    <span>LinkedIn: https://linked.in/nerajlal</span>
+                                                    <span>•</span>
+                    <span>GitHub: https://github.com/nerajlal</span>
+                            </div>
+        </header>
+
+        <section>
+            <h2 class="section-title">Summary</h2>
+            <p>bw ck w cjk wc ewj cw</p>
+        </section>
+
+        <section>
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-container">
+                            </div>
+        </section>
+
+        
+        <section>
+            <h2 class="section-title">Experience</h2>
+            <div class="timeline">
+                                    <div class="timeline-item">
+                        <h3 style="margin-top: 0;">Web Developer</h3>
+                        <p style="margin-bottom: 5px;">
+                            <strong>Serve Techno Research</strong>
+                                                            <span class="date-badge">Kollam</span>
+                                                    </p>
+                        <p style="margin-bottom: 10px;">
+                            <span class="date-badge">2024-03-25 - 2025-03-25</span>
+                        </p>
+                                                    <ul>
+                                                                        <li>dfsdfsd sdf sd  dsf</li>
+                                                                </ul>
+                                            </div>
+                            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Education</h2>
+            <div class="timeline">
+                                    <div class="timeline-item">
+                        <h3 style="margin-top: 0;">Master's</h3>
+                        <p style="margin-bottom: 5px;"><strong>Snit</strong></p>
+                        <p>
+                            <span class="date-badge">Graduated: 2024</span>
+                            <span class="date-badge">GPA: 85.00%</span>
+                        </p>
+                    </div>
+                            </div>
+        </section>
+
+                <section>
+            <h2 class="section-title">Projects</h2>
+            <div class="timeline">
+                                    <div class="timeline-item">
+                        <h3 style="margin-top: 0;">Serve The Needy</h3>
+                                                    <p style="margin-bottom: 5px;"><strong>Technologies:</strong> MongoDB, React, Express, Node</p>
+                                                                            <p style="margin-bottom: 10px;">
+                                <span class="date-badge">2024-03-25 - 2025-03-25</span>
+                            </p>
+                                                                            <ul>
+                                                                        <li>dcsdsd f sd f sdf sdf sd fsd</li>
+                                                                </ul>
+                                            </div>
+                            </div>
+        </section>
+        
+                <section>
+            <h2 class="section-title">Interests</h2>
+            <div class="skills-container">
+                                    <span class="skill-tag">
+                        Singinig                                                    (fg  f f sd f d fd sf sdf)
+                                            </span>
+                            </div>
+        </section>
+        
+        <script>
+            // Automatically trigger print dialog when printing from view_resume.php
+            if(window.location.search.includes('print=1')) {
+                window.print();
+            }
+        </script>
+    </body>
+    </html>
+    
