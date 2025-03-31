@@ -130,6 +130,10 @@
         <ul class="nav-menu">
             <li><a href="../index1.php">Main </a></li>
             <li><a href="index.php">Home</a></li>
+            <li><a href="personal.php">Personal Details</a></li>
+            <li><a href="profesional.php">Profesional Details</a></li>
+            <li><a href="specifics.php">Company</a></li>
+            <li><a href="preview.php">Preview</a></li>
             
         </ul>
     </nav>
