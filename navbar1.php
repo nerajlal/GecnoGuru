@@ -130,7 +130,7 @@
         <ul class="nav-menu" id="navMenu">
             <li><a href="index1.php">Home</a></li>
             <li><a href="Resume/index.php">Resume Builder</a></li> 
-            <li><a href="#.php">Cover Letter Builder</a></li> 
+            <li><a href="Cover/index.php">Cover Letter Builder</a></li> 
             <li><a href="#.php">Portfolio Website Builder</a></li> 
             <li><a href="#.php">Interview Preparation</a></li> 
             <li><a href="#.php">Job Portal</a></li> 
