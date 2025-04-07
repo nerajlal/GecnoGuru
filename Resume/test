@@ -1,0 +1,136 @@
+<?php
+include 'navbar.php';
+include 'controller.php';
+?>
+
+
+
+<?php
+require_once 'dbconnect.php';
+
+$email = $_SESSION['email'];
+$conn = get_db_connection();
+
+$query = $conn->prepare("SELECT * FROM education_details WHERE user = ?");
+$query->bind_param("s", $email);
+$query->execute();
+$result = $query->get_result();
+
+$data = $result->fetch_assoc();
+
+$qualification = isset($data['qualification']) ? $data['qualification'] : '';
+$institute = isset($data['institute']) ? $data['institute'] : '';
+$yop = isset($data['year_of_passout']) ? $data['year_of_passout'] : '';
+$percentage = isset($data['percentage']) ? $data['percentage'] : '';
+
+$conn->close();
+?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Details</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="form-container">
+        <form method="POST" action="controller.php">
+        <div id="education-container">
+            <div class="education-entry">
+                <div class="form-group">
+                    <label>Qualification:</label>
+                    <select name="qualification[]" required>
+                        <option value="">Select Qualification</option>
+                        <option value="High School" <?php if($qualification=="High School") echo "selected"; ?>>High School</option>
+                        <option value="Diploma" <?php if($qualification=="Diploma") echo "selected"; ?>>Diploma</option>
+                        <option value="Bachelor's" <?php if($qualification=="Bachelor's") echo "selected"; ?>>Bachelor's</option>
+                        <option value="Master's" <?php if($qualification=="Master's") echo "selected"; ?>>Master's</option>
+                        <option value="PhD" <?php if($qualification=="PhD") echo "selected"; ?>>PhD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Institute:</label>
+                    <input type="text" name="institute[]" value="<?php echo $institute; ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Year of Passout:</label>
+                    <input type="number" name="year_of_passout[]" value="<?php echo $yop; ?>" min="1900" max="2099" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Percentage:</label>
+                    <input type="number" name="percentage[]" value="<?php echo $percentage; ?>" min="0" max="100" step="0.01" required>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="addEducationBtn">+ Add More</button>
+        <br><br>
+        <input type="submit" name="submit_education_details" value="Save Education Details">
+        </form>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const educationContainer = document.getElementById('education-container');
+        const addEducationBtn = document.getElementById('addEducationBtn');
+        let educationCount = 1;
+
+        addEducationBtn.addEventListener('click', function() {
+            educationCount++;
+            
+            // Create new education entry
+            const newEntry = document.createElement('div');
+            newEntry.classList.add('education-entry');
+            newEntry.innerHTML = `
+
+                <br><hr><br>
+
+                <div class="form-group">
+                    <label for="qualification_${educationCount}">Qualification:</label>
+                    <select id="qualification_${educationCount}" name="qualification[]" required>
+                        <option value="">Select Qualification</option>
+                        <option value="High School">High School</option>
+                        <option value="Diploma">Diploma</option>
+                        <option value="Bachelor's">Bachelor's</option>
+                        <option value="Master's">Master's</option>
+                        <option value="PhD">PhD</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="institute_${educationCount}">Institute:</label>
+                    <input type="text" id="institute_${educationCount}" name="institute[]" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year_of_passout_${educationCount}">Year of Passout:</label>
+                    <input type="number" id="year_of_passout_${educationCount}" name="year_of_passout[]" min="1900" max="2099" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="percentage_${educationCount}">Percentage:</label>
+                    <input type="number" id="percentage_${educationCount}" name="percentage[]" min="0" max="100" step="0.01" required>
+                </div>
+
+                
+            `;
+            
+            educationContainer.appendChild(newEntry);
+        });
+    });
+    </script>
+</body>
+</html>
+
+<?php
+    include('footer.php');
+?>

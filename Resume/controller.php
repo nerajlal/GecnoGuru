@@ -1,602 +1,339 @@
 <?php
-// Include database connection
-include 'dbconnect.php';
+session_start(); // Required for using $_SESSION
 
-// Start session
-session_start();
-
-// Set default user email (you might want to replace this with actual session management)
-$user_email = 'neraj@gmail.com';
-
-// Function to sanitize input
+// Sanitize function
 function sanitize_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
+    return htmlspecialchars(stripslashes(trim($data)));
 }
 
-// Function to handle database connection
-function create_db_connection() {
-    $conn = new mysqli('localhost', 'root', '', 'resume_builder');
-    
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    
-    return $conn;
-}
+require_once ('dbconnect.php');
 
-// Handle Personal Details Form Submission
-if(isset($_POST['submit_personal_details'])) {
-    try {
-        // Sanitize and validate inputs
-        $name = sanitize_input($_POST['name']);
-        $email = sanitize_input($_POST['email']);
-        $phone = sanitize_input($_POST['phone']);
-        $address = sanitize_input($_POST['address']);
-        $github = sanitize_input($_POST['github']);
-        $linkedin = sanitize_input($_POST['linkedin']);
-        $job_role = sanitize_input($_POST['job_role']);
-        $description = sanitize_input($_POST['description']);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['email'])) {
 
-        // Validate email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Invalid email format");
-        }
+    if (isset($_POST['submit_personal_details'])) {
+        $name = sanitize_input($_POST["name"]);
+        $email = sanitize_input($_POST["email"]);
+        $phone = sanitize_input($_POST["phone"]);
+        $address = sanitize_input($_POST["address"]);
+        $github = sanitize_input($_POST["github"]);
+        $linkedin = sanitize_input($_POST["linkedin"]);
+        $jobrole = sanitize_input($_POST["job_role"]);
+        $description = sanitize_input($_POST["description"]);
 
-        // Create database connection
-        $conn = create_db_connection();
+        $session_email = $_SESSION['email'];
 
-        // Check if user already exists
-        $check_stmt = $conn->prepare("SELECT id FROM personal_details WHERE email = ?");
-        $check_stmt->bind_param("s", $email);
-        $check_stmt->execute();
-        $check_result = $check_stmt->get_result();
+        $conn = get_db_connection();
 
-        // Prepare SQL statement
-        if ($check_result->num_rows > 0) {
-            // Update existing record
-            $stmt = $conn->prepare("UPDATE personal_details SET 
-                name = ?, phone = ?, address = ?, 
-                github = ?, linkedin = ?, job_role = ?, 
-                description = ? WHERE email = ?");
-            $stmt->bind_param("ssssssss", 
-                $name, $phone, $address, 
-                $github, $linkedin, $job_role, 
-                $description, $email
-            );
-        } else {
-            // Insert new record
-            $stmt = $conn->prepare("INSERT INTO personal_details 
-                (user, name, email, phone, address, github, linkedin, job_role, description) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssss", 
-                $user_email, $name, $email, $phone, $address, 
-                $github, $linkedin, $job_role, $description
-            );
-        }
+        $stmt = $conn->prepare("
+            UPDATE personal_details
+            SET name = ?, email = ?, phone = ?, address = ?, github = ?, linkedin = ?, job_role = ?, description = ? 
+            WHERE user = ?
+        ");
+        $stmt->bind_param("sssssssss", $name, $email, $phone, $address, $github, $linkedin, $jobrole, $description, $session_email);
 
-        // Execute the statement
         if ($stmt->execute()) {
-            // Store email in session for future use
-            $_SESSION['user_email'] = $email;
-            
             echo "<script>
-                alert('Personal details saved successfully!');
+                alert('Personal details updated successfully.');
+                window.location.href = 'personal.php';
+            </script>";
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+    }
+
+
+    else if (isset($_POST['update_education'])) {
+        $education_id = sanitize_input($_POST["education_id"]);
+        $qualification = sanitize_input($_POST["qualification"]);
+        $institute = sanitize_input($_POST["institute"]);
+        $year_of_passout = sanitize_input($_POST["year_of_passout"]);
+        $percentage = sanitize_input($_POST["percentage"]);
+        
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
+        
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM education_details WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $education_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
+        
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
+            echo "<script>
+                alert('Error: You do not have permission to edit this record.');
                 window.location.href = 'education.php';
             </script>";
-        } else {
-            throw new Exception("Error saving details: " . $stmt->error);
+            exit();
         }
-
-        // Close statement and connection
+        
+        // Update the education record
+        $stmt = $conn->prepare("
+            UPDATE education_details 
+            SET qualification = ?, institute = ?, year_of_passout = ?, percentage = ? 
+            WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("ssssis", $qualification, $institute, $year_of_passout, $percentage, $education_id, $session_email);
+        
+        if ($stmt->execute()) {
+            echo "<script>
+                alert('Education record updated successfully.');
+                window.location.href = 'education.php';
+            </script>";
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        
         $stmt->close();
         $conn->close();
+    }    
+    
+    
+    else if (isset($_POST['update_experience'])) {
+        $experience_id = sanitize_input($_POST["experience_id"]);
+        $company_name = sanitize_input($_POST["company_name"]);
+        $job_title = sanitize_input($_POST["job_title"]);
+        $start_date = sanitize_input($_POST["start_date"]);
+        $end_date = sanitize_input($_POST["end_date"]);
+        $location = sanitize_input($_POST["location"]);
+        $job_description = sanitize_input($_POST["job_description"]);
 
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        exit();
-    }
-}
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
 
-// Handle Education Details Form Submission
-if(isset($_POST['submit_education_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM experience_details WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $experience_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
 
-        // Create database connection
-        $conn = create_db_connection();
-
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO education_details 
-            (user, qualification, institute, year_of_passout, percentage) 
-            VALUES (?, ?, ?, ?, ?)");
-        
-        // Get form data
-        $qualifications = $_POST['qualification'];
-        $institutes = $_POST['institute'];
-        $years_of_passout = $_POST['year_of_passout'];
-        $percentages = $_POST['percentage'];
-
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through education entries
-        for ($i = 0; $i < count($qualifications); $i++) {
-            // Sanitize inputs
-            $qualification = sanitize_input($qualifications[$i]);
-            $institute = sanitize_input($institutes[$i]);
-            $year_of_passout = sanitize_input($years_of_passout[$i]);
-            $percentage = sanitize_input($percentages[$i]);
-
-            // Bind parameters
-            $stmt->bind_param("ssssd", 
-                $_SESSION['user_email'], $qualification, 
-                $institute, $year_of_passout, $percentage
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
             echo "<script>
-                alert('$insertCount education details saved successfully!');
+                alert('Error: You do not have permission to edit this record.');
                 window.location.href = 'experience.php';
             </script>";
-        } else {
-            throw new Exception("Error saving education details: " . $stmt->error);
+            exit();
         }
 
-        // Close statement and connection
+        // Update the education record   
+        $stmt = $conn->prepare("
+            UPDATE experience_details 
+            SET company_name = ?, job_title = ?, start_date = ?, end_date = ?, job_description = ?, location = ? WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("ssssssis", $company_name, $job_title, $start_date, $end_date, $job_description,$location, $experience_id, $session_email);
+        
+        if ($stmt->execute()) {
+            echo "<script>
+                alert('Experience record updated successfully.');
+                window.location.href = 'experience.php';
+            </script>";
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        
         $stmt->close();
         $conn->close();
 
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        exit();
     }
-}
 
 
-// Handle Experience Details Form Submission
-if(isset($_POST['submit_experience_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
+    else if (isset($_POST['update_project'])) {
+        $project_id = sanitize_input($_POST["project_id"]);
+        $project_name = sanitize_input($_POST["project_name"]);
+        $project_description = sanitize_input($_POST["project_description"]);
+        $technologies = sanitize_input($_POST["technologies"]);
+        $project_link = sanitize_input($_POST["project_link"]);
+        $start_date = sanitize_input($_POST["start_date"]);
+        $end_date = sanitize_input($_POST["end_date"]);
 
-        // Create database connection
-        $conn = create_db_connection();
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
 
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO experience_details 
-            (user, company_name, job_title, start_date, end_date, is_current, location, job_description) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        
-        // Get form data
-        $company_names = $_POST['company_name'];
-        $job_titles = $_POST['job_title'];
-        $start_dates = $_POST['start_date'];
-        $end_dates = $_POST['end_date'];
-        $is_current_array = isset($_POST['is_current']);
-        $locations = $_POST['location'];
-        $job_descriptions = $_POST['job_description'];
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM projects_details WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $project_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
 
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through experience entries
-        for ($i = 0; $i < count($company_names); $i++) {
-            // Sanitize inputs
-            $company_name = sanitize_input($company_names[$i]);
-            $job_title = sanitize_input($job_titles[$i]);
-            $start_date = sanitize_input($start_dates[$i]);
-            
-            // Handle end date and current job
-            $end_date = null;
-            $is_current_job = 0;
-            
-            // Check if the current job checkbox is set for this entry
-            if (isset($is_current_array[$i]) && $is_current_array[$i] == 'on') {
-                $is_current_job = 1;
-            } else {
-                $end_date = !empty($end_dates[$i]) ? sanitize_input($end_dates[$i]) : null;
-            }
-
-            $location = isset($locations[$i]) ? sanitize_input($locations[$i]) : '';
-            $job_description = isset($job_descriptions[$i]) ? sanitize_input($job_descriptions[$i]) : '';
-
-            // Bind parameters
-            $stmt->bind_param("sssssiss", 
-                $_SESSION['user_email'], 
-                $company_name, 
-                $job_title, 
-                $start_date, 
-                $end_date, 
-                $is_current_job, 
-                $location, 
-                $job_description
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                error_log("Error inserting experience: " . $stmt->error);
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
             echo "<script>
-                alert('$insertCount experience details saved successfully!');
+                alert('Error: You do not have permission to edit this record.');
                 window.location.href = 'projects.php';
             </script>";
-        } else {
-            throw new Exception("Error saving experience details: " . $stmt->error);
+            exit();
         }
 
-        // Close statement and connection
-        $stmt->close();
-        $conn->close();
-
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        error_log($e->getMessage());
-        exit();
-    }
-}
-?>
-
-
-
-
-
-<?php
-// Handle Projects Details Form Submission
-if(isset($_POST['submit_projects_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
-
-        // Create database connection
-        $conn = create_db_connection();
-
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO projects_details 
-            (user, project_name, project_description, technologies, project_link, start_date, end_date) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // Update the project record  
+        $stmt = $conn->prepare("
+            UPDATE projects_details 
+            SET project_name = ?, project_description = ?, technologies = ?, project_link = ?, start_date = ?, end_date = ? WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("ssssssis", $project_name, $project_description, $technologies, $project_link, $start_date, $end_date, $project_id, $session_email);
         
-        // Get form data
-        $project_names = $_POST['project_name'];
-        $project_descriptions = $_POST['project_description'];
-        $technologies = $_POST['technologies'];
-        $project_links = $_POST['project_link'];
-        $start_dates = $_POST['start_date'];
-        $end_dates = $_POST['end_date'];
-
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through project entries
-        for ($i = 0; $i < count($project_names); $i++) {
-            // Sanitize inputs
-            $project_name = sanitize_input($project_names[$i]);
-            $project_description = sanitize_input($project_descriptions[$i]);
-            $technology = isset($technologies[$i]) ? sanitize_input($technologies[$i]) : null;
-            $project_link = isset($project_links[$i]) ? sanitize_input($project_links[$i]) : null;
-            $start_date = !empty($start_dates[$i]) ? sanitize_input($start_dates[$i]) : null;
-            $end_date = !empty($end_dates[$i]) ? sanitize_input($end_dates[$i]) : null;
-
-            // Bind parameters
-            $stmt->bind_param("sssssss", 
-                $_SESSION['user_email'], 
-                $project_name, 
-                $project_description, 
-                $technology, 
-                $project_link, 
-                $start_date, 
-                $end_date
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                error_log("Error inserting project: " . $stmt->error);
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($stmt->execute()) {
             echo "<script>
-                alert('$insertCount project details saved successfully!');
-                window.location.href = 'hobbies.php';
+                alert('Project record updated successfully.');
+                window.location.href = 'projects.php';
             </script>";
+            exit();
         } else {
-            throw new Exception("Error saving project details: " . $stmt->error);
+            echo "Error: " . $stmt->error;
         }
-
-        // Close statement and connection
+        
         $stmt->close();
         $conn->close();
-
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        error_log($e->getMessage());
-        exit();
     }
-}
-?>
 
+    else if (isset($_POST['update_skill'])) {
+        $skill_id = sanitize_input($_POST["skill_id"]);
+        $skill = sanitize_input($_POST["skill"]);
+        $proficiency = sanitize_input($_POST["proficiency"]);
+        $skill_description = sanitize_input($_POST["skill_description"]);
+       
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
 
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM user_skills WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $skill_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
 
-<?php
-// Handle Hobbies Details Form Submission
-if(isset($_POST['submit_hobbies_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
-
-        // Create database connection
-        $conn = create_db_connection();
-
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO hobbies_details 
-            (user, hobby, hobby_description) 
-            VALUES (?, ?, ?)");
-        
-        // Get form data
-        $hobbies = $_POST['hobby'];
-        $hobby_descriptions = $_POST['hobby_description'];
-
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through hobby entries
-        for ($i = 0; $i < count($hobbies); $i++) {
-            // Sanitize inputs
-            $hobby = sanitize_input($hobbies[$i]);
-            $hobby_description = !empty($hobby_descriptions[$i]) ? 
-                sanitize_input($hobby_descriptions[$i]) : null;
-
-            // Bind parameters
-            $stmt->bind_param("sss", 
-                $_SESSION['user_email'], 
-                $hobby, 
-                $hobby_description
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                error_log("Error inserting hobby: " . $stmt->error);
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
             echo "<script>
-                alert('$insertCount hobbies saved successfully!');
+                alert('Error: You do not have permission to edit this record.');
                 window.location.href = 'skills.php';
             </script>";
-        } else {
-            throw new Exception("Error saving hobbies details: " . $stmt->error);
+            exit();
         }
 
-        // Close statement and connection
+        // Update the project record 
+        $stmt = $conn->prepare("
+            UPDATE user_skills 
+            SET skill = ?, proficiency = ?, skill_description = ? WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("sssis", $skill, $proficiency, $skill_description, $skill_id, $session_email);
+        
+        if ($stmt->execute()) {
+            echo "<script>
+                alert('Skills record updated successfully.');
+                window.location.href = 'skills.php';
+            </script>";
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        
         $stmt->close();
         $conn->close();
-
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        error_log($e->getMessage());
-        exit();
     }
-}
-?>
 
 
-<?php
-// Handle Skills Details Form Submission
-if(isset($_POST['submit_skills_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
+    else if (isset($_POST['update_achievement'])) {
+        $achievement_id = sanitize_input($_POST["achievement_id"]);
+        $achievement = sanitize_input($_POST["achievement"]);
+        $organization = sanitize_input($_POST["organization"]);
+        $achievement_date = sanitize_input($_POST["achievement_date"]);
+        $achievement_description = sanitize_input($_POST["achievement_description"]);
+       
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
 
-        // Create database connection
-        $conn = create_db_connection();
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM user_achievements WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $achievement_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
 
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO user_skills 
-            (user, skill, proficiency, skill_description) 
-            VALUES (?, ?, ?, ?)");
-        
-        // Get form data
-        $skills = $_POST['skill'];
-        $proficiencies = $_POST['skill_proficiency'];
-        $skill_descriptions = $_POST['skill_description'];
-
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through skill entries
-        for ($i = 0; $i < count($skills); $i++) {
-            // Sanitize inputs
-            $skill = sanitize_input($skills[$i]);
-            $proficiency = sanitize_input($proficiencies[$i]);
-            $skill_description = !empty($skill_descriptions[$i]) ? 
-                sanitize_input($skill_descriptions[$i]) : null;
-
-            // Bind parameters
-            $stmt->bind_param("ssss", 
-                $_SESSION['user_email'], 
-                $skill, 
-                $proficiency,
-                $skill_description
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                error_log("Error inserting skill: " . $stmt->error);
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
             echo "<script>
-                alert('$insertCount skills saved successfully!');
+                alert('Error: You do not have permission to edit this record.');
                 window.location.href = 'achievements.php';
             </script>";
-        } else {
-            throw new Exception("Error saving skills details: " . $stmt->error);
+            exit();
         }
 
-        // Close statement and connection
-        $stmt->close();
-        $conn->close();
-
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        error_log($e->getMessage());
-        exit();
-    }
-}
-
-?>
-
-
-<?php
-
-    // Handle Achievement Details Form Submission
-if(isset($_POST['submit_achievement_details'])) {
-    try {
-        // Ensure user is logged in
-        if (!isset($_SESSION['user_email'])) {
-            throw new Exception("Please complete personal details first");
-        }
-
-        // Create database connection
-        $conn = create_db_connection();
-
-        // Prepare SQL statement
-        $stmt = $conn->prepare("INSERT INTO user_achievements 
-            (user, achievement, organization, achievement_date, achievement_description) 
-            VALUES (?, ?, ?, ?, ?)");
+        // Update the project record     
+        $stmt = $conn->prepare("
+            UPDATE user_achievements 
+            SET achievement = ?, organization = ?, achievement_date = ?, achievement_description =? WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("ssssis", $achievement, $organization, $achievement_date, $achievement_description, $achievement_id, $session_email);
         
-        // Get form data
-        $achievements = $_POST['achievement'];
-        $organizations = $_POST['achievement_organization'];
-        $achievement_dates = $_POST['achievement_date'];
-        $achievement_descriptions = $_POST['achievement_description'];
-
-        // Track successful insertions
-        $insertSuccess = true;
-        $insertCount = 0;
-
-        // Loop through achievement entries
-        for ($i = 0; $i < count($achievements); $i++) {
-            // Sanitize inputs
-            $achievement = sanitize_input($achievements[$i]);
-            $organization = !empty($organizations[$i]) ? sanitize_input($organizations[$i]) : null;
-            $achievement_date = !empty($achievement_dates[$i]) ? sanitize_input($achievement_dates[$i]) : null;
-            $achievement_description = !empty($achievement_descriptions[$i]) ? 
-                sanitize_input($achievement_descriptions[$i]) : null;
-
-            // Bind parameters
-            $stmt->bind_param("sssss", 
-                $_SESSION['user_email'], 
-                $achievement, 
-                $organization,
-                $achievement_date,
-                $achievement_description
-            );
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $insertSuccess = false;
-                error_log("Error inserting achievement: " . $stmt->error);
-                break;
-            }
-            $insertCount++;
-        }
-
-        // Check overall success
-        if ($insertSuccess) {
+        if ($stmt->execute()) {
             echo "<script>
-                alert('$insertCount achievements saved successfully!');
-                window.location.href = 'resume.php';
+                alert('Achievements record updated successfully.');
+                window.location.href = 'achievements.php';
             </script>";
+            exit();
         } else {
-            throw new Exception("Error saving achievement details: " . $stmt->error);
+            echo "Error: " . $stmt->error;
         }
-
-        // Close statement and connection
+        
         $stmt->close();
         $conn->close();
-
-    } catch (Exception $e) {
-        // Handle exceptions
-        echo "<script>
-            alert('" . $e->getMessage() . "');
-            window.history.back();
-        </script>";
-        error_log($e->getMessage());
-        exit();
     }
-}
+
+
+    else if (isset($_POST['update_hobby'])) {
+        $hobby_id = sanitize_input($_POST["hobby_id"]);
+        $hobby = sanitize_input($_POST["hobby"]);
+        $hobby_description = sanitize_input($_POST["hobby_description"]);
+       
+        $session_email = $_SESSION['email'];
+        $conn = get_db_connection();
+
+        // First verify this education record belongs to the logged-in user
+        $verify = $conn->prepare("SELECT id FROM hobbies_details WHERE id = ? AND user = ?");
+        $verify->bind_param("is", $hobby_id, $session_email);
+        $verify->execute();
+        $verify_result = $verify->get_result();
+
+        if ($verify_result->num_rows === 0) {
+            // Record doesn't belong to this user or doesn't exist
+            echo "<script>
+                alert('Error: You do not have permission to edit this record.');
+                window.location.href = 'hobbies.php';
+            </script>";
+            exit();
+        }
+
+        // Update the project record     
+        $stmt = $conn->prepare("
+            UPDATE hobbies_details 
+            SET hobby = ?, hobby_description = ? WHERE id = ? AND user = ?
+        ");
+        $stmt->bind_param("ssis", $hobby, $hobby_description, $hobby_id, $session_email);
+        
+        if ($stmt->execute()) {
+            echo "<script>
+                alert('Hobbies record updated successfully.');
+                window.location.href = 'hobbies.php';
+            </script>";
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        
+        $stmt->close();
+        $conn->close();
+    }
+
+
+
+
+
+
+
+    
+}      
 
 ?>

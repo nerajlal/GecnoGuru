@@ -1,13 +1,33 @@
 <?php
-include 'navbar.php';
-include 'controller.php';
+include ('navbar.php');
+require_once ('dbconnect.php');
+
+session_start();
+
+$email = $_SESSION['email'];
+$conn = get_db_connection();
 
 // Ensure user is logged in
-if (!isset($_SESSION['user_email'])) {
-    header("Location: personal.php");
+if (!isset($_SESSION['email'])) {
+    header("Location: ../index.php");
     exit();
 }
+
+// Get all hobbies records for this user
+$query = $conn->prepare("SELECT * FROM hobbies_details WHERE user = ?");
+$query->bind_param("s", $email);
+$query->execute();
+$result = $query->get_result();
+
+// Fetch all hobbies records as array
+$hobbies_records = array();
+while ($row = $result->fetch_assoc()) {
+    $hobbies_records[] = $row;
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,63 +38,97 @@ if (!isset($_SESSION['user_email'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="form-container">
-        <form action="controller.php" method="POST" id="hobbiesForm">
-            <div id="hobbies-container">
-                <div class="hobbies-entry">
+    <div class="container">
+        <h2>Hobbies and Interests</h2>
+        <a href="../uhobbies.php" class="add-new-btn">
+            <i class="fas fa-plus"></i> Add New Hobby
+        </a>
+        <?php if (empty($hobbies_records)): ?>
+            <p class="no-records">No hobbies records found in the database.</p>
+        <?php else: ?>
+            <table class="skills-table">
+                <thead>
+                    <tr>
+                        <th>Hobby/Interest</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($hobbies_records as $record): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($record['hobby']); ?></td>
+                            <td><?php echo htmlspecialchars($record['hobby_description']); ?></td>
+                            <td>
+                                <button class="edit-btn" onclick="openEditForm(<?php echo $record['id']; ?>)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+        
+        <!-- Edit Form Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeEditForm()">&times;</span>
+                <h3>Edit Hobby Details</h3>
+                <form id="editForm" action="controller.php" method="POST">
+                    <input type="hidden" id="hobby_id" name="hobby_id">
+                    
                     <div class="form-group">
-                        <label for="hobby_1">Hobby/Interest:</label>
-                        <input type="text" id="hobby_1" name="hobby[]" required placeholder="e.g., Photography, Reading, Hiking">
+                        <label for="hobby">Hobby/Interest:</label>
+                        <input type="text" id="hobby" name="hobby" required placeholder="e.g., Photography, Reading">
                     </div>
                     
                     <div class="form-group">
-                        <label for="hobby_description_1">Description (Optional):</label>
-                        <textarea id="hobby_description_1" name="hobby_description[]" rows="3" placeholder="Tell us more about this hobby"></textarea>
+                        <label for="hobby_description">Description (Optional):</label>
+                        <textarea id="hobby_description" name="hobby_description" rows="3" placeholder="Tell us more about this hobby"></textarea>
                     </div>
-                </div>
+                    
+                    <div class="form-group">
+                        <input type="submit" name="update_hobby" value="Update" class="submit-btn">
+                        <!-- <button type="button" onclick="closeEditForm()" class="cancel-btn">Cancel</button> -->
+                    </div>
+                </form>
             </div>
-
-            <button type="button" class="add-education-btn" id="addHobbyBtn">
-                <i class="fas fa-plus-circle"></i> Add Another Hobby
-            </button>
-            
-            <div class="form-group">
-                <input type="submit" name="submit_hobbies_details" value="Save Hobbies">
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const hobbiesContainer = document.getElementById('hobbies-container');
-        const addHobbyBtn = document.getElementById('addHobbyBtn');
-        let hobbyCount = 1;
-
-        addHobbyBtn.addEventListener('click', function() {
-            hobbyCount++;
+        // Store hobbies records data in JavaScript for edit form
+        const hobbiesData = <?php echo json_encode($hobbies_records); ?>;
+        const modal = document.getElementById('editModal');
+        
+        // Function to open edit form modal with data
+        function openEditForm(id) {
+            // Find the record with matching ID
+            const record = hobbiesData.find(item => item.id == id);
             
-            // Create new hobby entry
-            const newEntry = document.createElement('div');
-            newEntry.classList.add('hobbies-entry');
-            newEntry.innerHTML = `
-
-                <br><hr><br>
-
-                <div class="form-group">
-                    <label for="hobby_${hobbyCount}">Hobby/Interest:</label>
-                    <input type="text" id="hobby_${hobbyCount}" name="hobby[]" required placeholder="e.g., Photography, Reading, Hiking">
-                </div>
+            if (record) {
+                // Populate form fields
+                document.getElementById('hobby_id').value = record.id;
+                document.getElementById('hobby').value = record.hobby;
+                document.getElementById('hobby_description').value = record.hobby_description;
                 
-                <div class="form-group">
-                    <label for="hobby_description_${hobbyCount}">Description (Optional):</label>
-                    <textarea id="hobby_description_${hobbyCount}" name="hobby_description[]" rows="3" placeholder="Tell us more about this hobby"></textarea>
-                </div>
-
-            `;
-            
-            hobbiesContainer.appendChild(newEntry);
-        });
-    });
+                // Show modal
+                modal.style.display = 'block';
+            }
+        }
+        
+        // Function to close edit form modal
+        function closeEditForm() {
+            modal.style.display = 'none';
+        }
+        
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeEditForm();
+            }
+        }
     </script>
 </body>
 </html>

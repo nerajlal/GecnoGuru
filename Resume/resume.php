@@ -1,9 +1,19 @@
 <?php
 session_start();
+$user_email = $_SESSION['email'];
+
+include('dbconnect.php');
+include('navbar.php');
+
+// Ensure user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
 
 // Function to get user details from database
 function getUserDetails($user_email) {
-    $conn = new mysqli('localhost', 'root', '', 'resume_builder');
     
     // Prepare arrays to store different sections
     $user_details = array(
@@ -16,8 +26,10 @@ function getUserDetails($user_email) {
         'achievement' => array()
     );
 
+    $conn = get_db_connection();
+    
     // Fetch personal details
-    $personal_query = $conn->prepare("SELECT * FROM personal_details WHERE email = ?");
+    $personal_query = $conn->prepare("SELECT * FROM personal_details WHERE user = ?");
     $personal_query->bind_param("s", $user_email);
     $personal_query->execute();
     $user_details['personal'] = $personal_query->get_result()->fetch_assoc();
@@ -2997,16 +3009,15 @@ function generateMultipleResumeFormats($user_email) {
 }
 
 // Check if user is logged in
-if (!isset($_SESSION['user_email'])) {
+if (!isset($_SESSION['email'])) {
     die("Please log in to view your resume.");
 }
 
-include 'dbconnect.php';
-include 'navbar.php';
+
 
 // Generate and display resumes
 try {
-    $user_email = $_SESSION['user_email']; // Ensure this is set during login
+    $user_email = $_SESSION['email']; // Ensure this is set during login
     $resumes = generateMultipleResumeFormats($user_email);
 
  // Display resume selection

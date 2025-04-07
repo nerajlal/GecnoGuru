@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 $email = $_SESSION['email'];
 if (!isset($_SESSION['email'])) {
     echo '<script>alert("You are not able to access this page. Please Login!!"); window.location.href="../login.php";</script>';
@@ -53,8 +54,6 @@ else{
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
             color: var(--dark);
             background-color: var(--light);
             overflow-x: hidden;

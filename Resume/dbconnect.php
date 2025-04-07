@@ -9,18 +9,21 @@ $conn = new mysqli($host, $user, $pass);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Initial connection failed: " . $conn->connect_error);
 }
 
-// Close initial connection and reconnect to the specific database
-$conn->close();
-$conn = new mysqli($host, $user, $pass, $dbname);
+// Create database if not exists
+$conn->query("CREATE DATABASE IF NOT EXISTS $dbname");
 
-// Check database connection
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+// Select database
+$conn->select_db($dbname);
+
+// Set charset
+$conn->set_charset("utf8mb4");
+
+// Make connection available globally
+function get_db_connection() {
+    global $conn;
+    return $conn;
 }
-
-// Close the connection
-$conn->close();
 ?>
