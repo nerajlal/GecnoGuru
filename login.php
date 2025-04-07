@@ -1,5 +1,5 @@
 <?php
-require_once 'controller.php';
+require_once ('controller.php');
 
 ?>
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ require_once 'controller.php';
     </style>
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
+    <?php include ('navbar.php'); ?>
     
     <div class="login-container">
         <h2>Sign in to your account</h2>
@@ -147,7 +147,7 @@ require_once 'controller.php';
         
         <div class="footer-links">
             <a href="forgot_password.php">Forgot password?</a> | 
-            <a href="register.php">Create account</a>
+            <a href="reg.php">Create account</a>
         </div>
     </div>
 </body>

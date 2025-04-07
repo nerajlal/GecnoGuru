@@ -1,4 +1,6 @@
-<?php include ('navbar1.php'); ?>
+<?php include ('navbar1.php'); 
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +24,6 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: #f8fafc;
             margin: 0;
             padding: 0;
         }
@@ -1038,12 +1036,11 @@
             <div class="hero-content">
                 <h1>Your Complete Career Development Solution</h1>
                 <p>Build stunning resumes, compelling cover letters, professional portfolios, and prepare for interviews—all in one powerful platform. Start your success journey today.</p>
-                <br><br>
                 <div class="hero-buttons">
-                    <a href="#.php" class="btn btn-primary">Get Started for Free</a>
-                    <a href="Resume/index.php" class="btn btn-secondary">Make Resumes</a>
+                    <a href="login.php" class="btn btn-primary">Get Started for Free</a>
+                    <a href="login.php" class="btn btn-secondary">View Templates</a>
                 </div>
-                <div class="hero-badges">
+                <!-- <div class="hero-badges">
                     <div class="hero-badge">
                         <i class="fas fa-users"></i>
                         <span>50,000+ Users</span>
@@ -1052,7 +1049,7 @@
                         <i class="fas fa-star"></i>
                         <span>4.9/5 Rating</span>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="hero-image">
                 <img src="Images/1.avif" alt="Resume Forge Platform Preview">
@@ -1074,7 +1071,7 @@
                     </div>
                     <h3>Resume Builder</h3>
                     <p>Create professional, ATS-friendly resumes that highlight your skills and experience. Choose from dozens of expert-designed templates.</p>
-                    <a href="Resume/index.php" class="service-link">Create Resume <i class="fas fa-arrow-right"></i></a>
+                    <a href="login.php" class="service-link">Create Resume <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <div class="service-card">
@@ -1083,7 +1080,7 @@
                     </div>
                     <h3>Cover Letter Builder</h3>
                     <p>Craft compelling cover letters that complement your resume and demonstrate your value to potential employers.</p>
-                    <a href="#.php" class="service-link">Write Cover Letter <i class="fas fa-arrow-right"></i></a>
+                    <a href="cover-letter-builder.php" class="service-link">Write Cover Letter <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <div class="service-card">
@@ -1092,26 +1089,26 @@
                     </div>
                     <h3>Portfolio Website</h3>
                     <p>Showcase your work with a personalized portfolio website. Perfect for creative professionals and freelancers.</p>
-                    <a href="#.php" class="service-link">Build Portfolio <i class="fas fa-arrow-right"></i></a>
+                    <a href="portfolio-website.php" class="service-link">Build Portfolio <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
-                <div class="service-card">
+                <!-- <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-comments"></i>
                     </div>
                     <h3>Interview Preparation</h3>
                     <p>Practice with AI-powered interview simulations and get real-time feedback to improve your interview skills.</p>
-                    <a href="#.php" class="service-link">Prepare for Interviews <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <a href="login.php" class="service-link">Prepare for Interviews <i class="fas fa-arrow-right"></i></a>
+                </div> -->
 
-                <div class="service-card">
+                <!-- <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-briefcase"></i>
                     </div>
                     <h3>Job Portal</h3>
                     <p>Discover and apply for relevant job openings. Leverage AI-powered tools to enhance your application and interview readiness.</p>
-                    <a href="#.php" class="service-link">Apply for Job <i class="fas fa-arrow-right"></i></a>
-                </div>
+                    <a href="login.php" class="service-link">Apply for Job <i class="fas fa-arrow-right"></i></a>
+                </div> -->
             </div>
         </div>
     </section>
@@ -1167,7 +1164,7 @@
     </section>
     
     <!-- Statistics Section -->
-    <section class="stats-section">
+    <!-- <section class="stats-section">
         <div class="stats-container">
             <div class="stat-box">
                 <div class="stat-number">50,000+</div>
@@ -1186,7 +1183,9 @@
                 <div class="stat-label">Average Rating</div>
             </div>
         </div>
-    </section>
+    </section> -->
+    
+    
     
     <!-- CTA Section -->
     <section class="cta-section">
@@ -1194,7 +1193,7 @@
             <h2>Ready to Launch Your Career?</h2>
             <p>Create your professional resume in minutes and take the first step toward your dream job.</p>
             <div class="cta-buttons">
-                <a href="index1.php" class="btn btn-primary">Get Started Now</a>
+                <a href="login.php" class="btn btn-primary">Get Started Now</a>
                 <a href="#features" class="btn btn-secondary">Learn More</a>
             </div>
         </div>

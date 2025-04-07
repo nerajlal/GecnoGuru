@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GecnoGuru</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -11,6 +12,7 @@
             --text-color: white;
             --hover-color: #ddd;
             --border-color: #444;
+            --dropdown-bg: #444;
         }
         
         * {
@@ -24,7 +26,7 @@
         }
         
         body {
-            padding-top: 60px; /* Offset for fixed navbar */
+            padding-top: 60px; 
         }
         
         .navbar {
@@ -37,7 +39,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            z-index: 1000;
+            z-index: 1001; /* Ensure this is present */
         }
         
         .navbar .logo a {
@@ -63,6 +65,57 @@
         
         .nav-menu li a:hover {
             color: var(--hover-color);
+        }
+        
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-toggle {
+            color: var(--text-color);
+            background: var(--primary-bg);
+            border: none;
+            cursor: pointer;
+            padding: 10px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dropdown-toggle:hover {
+            color: var(--hover-color);
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--dropdown-bg);
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1002; /* Increased from 1 to 1100 */
+            top: 100%;
+            left: 0px;
+            border-radius: 4px;
+            padding: 5px 0;
+        }
+        
+        .dropdown-menu a {
+            color: var(--text-color);
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: var(--primary-bg);
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
         }
         
         .menu-toggle {
@@ -116,8 +169,42 @@
             .menu-toggle {
                 display: block;
             }
+            
+            /* Mobile dropdown styles */
+            .dropdown {
+                width: 100%;
+            }
+            
+            .dropdown-toggle {
+                width: 100%;
+                padding: 15px;
+                justify-content: center;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                display: none;
+                padding: 0;
+            }
+            
+            .dropdown-menu.show {
+                display: block;
+            }
+            
+            .dropdown-menu a {
+                padding: 15px;
+                background-color: var(--dropdown-bg);
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .dropdown-menu a:last-child {
+                border-bottom: none;
+            }
         }
     </style>
+    
 </head>
 <body>
     <nav class="navbar">
@@ -128,12 +215,25 @@
             <i class="fas fa-bars"></i>
         </button>
         <ul class="nav-menu" id="navMenu">
-            <li><a href="index1.php">Home</a></li>
+            <li><a class="active" href="index1.php">Home</a></li>
+            <li class="dropdown">
+                <button class="dropdown-toggle">Add Details <i class="fas fa-chevron-down"></i></button>
+                <div class="dropdown-menu">
+                    <a href="upersonal.php">Personal Details</a>
+                    <a href="ueducation.php">Education Details</a>
+                    <a href="uexperience.php">Experience Details</a>
+                    <a href="uprojects.php">Project Details</a>
+                    <a href="uskills.php">Skill Details</a>
+                    <a href="uachievements.php">Achievements Details</a>
+                    <a href="uhobbies.php">Hobbies Details</a>
+                </div>
+            </li> 
             <li><a href="Resume/index.php">Resume Builder</a></li> 
-            <li><a href="#.php">Cover Letter Builder</a></li> 
-            <li><a href="#.php">Portfolio Website Builder</a></li> 
+            <li><a href="Cover/index.php">Cover Letter Builder</a></li> 
+            <li><a href="#.php">Portfolio Builder</a></li> 
             <li><a href="#.php">Interview Preparation</a></li> 
             <li><a href="#.php">Job Portal</a></li> 
+            <li><a href="profile.php">My Profile</a></li> 
             <li><a href="logout.php">LogOut</a></li> 
         </ul>
     </nav>
@@ -143,6 +243,7 @@
             const menuToggle = document.querySelector('.menu-toggle');
             const navMenu = document.querySelector('.nav-menu');
             const icon = menuToggle.querySelector('i');
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
             
             // Initialize menu state
             function initMenu() {
@@ -171,9 +272,23 @@
                 }
             }
             
+            // Toggle dropdown on mobile
+            function toggleDropdown(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdownMenu = this.nextElementSibling;
+                    dropdownMenu.classList.toggle('show');
+                }
+            }
+            
             // Event listeners
             menuToggle.addEventListener('click', toggleMenu);
             document.addEventListener('click', closeMenu);
+            
+            // Add event listeners to dropdown toggles
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', toggleDropdown);
+            });
             
             // Close menu when clicking a nav link (mobile)
             document.querySelectorAll('.nav-menu a').forEach(link => {
@@ -191,6 +306,10 @@
                 initMenu();
                 if (window.innerWidth > 768) {
                     navMenu.classList.add('active');
+                    // Hide all mobile dropdowns
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
                 } else if (navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
                     icon.classList.remove('fa-times');

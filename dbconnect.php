@@ -4,31 +4,26 @@ $user = 'root';
 $pass = '';
 $dbname = 'resume_builder';
 
-// Create connection to specific database directly
-$conn = new mysqli($host, $user, $pass, $dbname);
+// Create connection
+$conn = new mysqli($host, $user, $pass);
 
 // Check connection
 if ($conn->connect_error) {
-    // If database doesn't exist, create it
-    if ($conn->connect_errno == 1049) {
-        $conn = new mysqli($host, $user, $pass);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        
-        // Create database
-        $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
-        if ($conn->query($sql) === TRUE) {
-            $conn->select_db($dbname);
-            createTables($conn); // Create tables after DB creation
-        } else {
-            die("Error creating database: " . $conn->error);
-        }
-    } else {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    die("Initial connection failed: " . $conn->connect_error);
 }
 
+// Create database if not exists
+$conn->query("CREATE DATABASE IF NOT EXISTS $dbname");
 
+// Select database
+$conn->select_db($dbname);
+
+// Set charset
 $conn->set_charset("utf8mb4");
+
+// Make connection available globally
+function get_db_connection() {
+    global $conn;
+    return $conn;
+}
 ?>
