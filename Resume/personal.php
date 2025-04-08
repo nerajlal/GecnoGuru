@@ -1,15 +1,22 @@
 <?php
-include ('navbar.php');
-include ('controller.php');
-include_once('dbconnect.php');
-
-$user_email = $_SESSION['email'];
+// Start the session first
+session_start();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: ../index.php");
     exit();
 }
+
+// Get user email
+$user_email = $_SESSION['email'];
+
+// Include the navbar after session check
+include ('navbar.php');
+include_once('dbconnect.php');
+?>
+
+<?php
 
 // Get existing personal details if available
 $personal_details = array();
@@ -25,15 +32,7 @@ if (isset($_SESSION['email'])) {
     $conn->close();
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Details</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+
     <div class="form-container">
         <form action="controller.php" method="POST">
             <div class="form-group">
@@ -96,8 +95,6 @@ if (isset($_SESSION['email'])) {
             </div>
         </form>
     </div>
-</body>
-</html>
 
 <?php
     include('footer.php');

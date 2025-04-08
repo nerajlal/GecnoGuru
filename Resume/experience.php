@@ -1,16 +1,22 @@
 <?php
-include ('navbar.php');
-require_once ('dbconnect.php');
-
+// Start the session first
 session_start();
-$email = $_SESSION['email'];
-$conn = get_db_connection();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: ../index.php");
     exit();
 }
+
+// Get user email
+$email = $_SESSION['email'];
+
+// Include the navbar after session check
+include ('navbar.php');
+include_once('dbconnect.php');
+?>
+
+<?php
 
 // Get all experience records for this user
 $query = $conn->prepare("SELECT * FROM experience_details WHERE user = ? ORDER BY start_date DESC");

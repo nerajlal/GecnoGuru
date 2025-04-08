@@ -1,17 +1,22 @@
 <?php
-include ('navbar.php');
-require_once ('dbconnect.php');
-
+// Start the session first
 session_start();
-
-$email = $_SESSION['email'];
-$conn = get_db_connection();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: ../index.php");
     exit();
 }
+
+// Get user email
+$email = $_SESSION['email'];
+
+// Include the navbar after session check
+include ('navbar.php');
+include_once('dbconnect.php');
+?>
+
+<?php
 
 // Get all hobbies records for this user
 $query = $conn->prepare("SELECT * FROM hobbies_details WHERE user = ?");
@@ -28,16 +33,6 @@ while ($row = $result->fetch_assoc()) {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hobbies and Interests</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
     <div class="container">
         <h2>Hobbies and Interests</h2>
         <a href="../uhobbies.php" class="add-new-btn">
@@ -130,8 +125,6 @@ $conn->close();
             }
         }
     </script>
-</body>
-</html>
 
 <?php
     include('footer.php');

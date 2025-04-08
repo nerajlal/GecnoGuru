@@ -1,15 +1,20 @@
 <?php
-session_start();
-$user_email = $_SESSION['email'];
 
-include('dbconnect.php');
-include('navbar.php');
+// Start the session first
+session_start();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: ../index.php");
     exit();
 }
+
+// Get user email
+$email = $_SESSION['email'];
+
+// Include the navbar after session check
+include ('navbar.php');
+include_once('dbconnect.php');
 
 
 // Function to get user details from database
