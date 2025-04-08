@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+$email = $_SESSION['email'];
+if (!isset($_SESSION['email'])) {
+    echo '<script>alert("You are not able to access this page. Please Login!!"); window.location.href="../login.php";</script>';
+    exit(); // Stop script execution
+}
+else{
+?>
+
+
 <?php include ('navbar.php'); ?>
 
 <!DOCTYPE html>
@@ -5,428 +17,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GecnoGuru - Your Complete Career Solution</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>CoverLetter Pro | Write Your Perfect Cover Letter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-                /* Global styles */
-                :root {
-            --primary-color: #2563eb;
-            --secondary-color: #3b82f6;
-            --accent-color: #60a5fa;
-            --light-color: #f0f9ff;
-            --dark-color: #1e3a8a;
-            --text-dark: #1e293b;
-            --text-light: #94a3b8;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #4cc9f0;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --dark: #212529;
+            --gray-dark: #495057;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: #f8fafc;
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
         .container {
             width: 100%;
-            max-width: 1280px;
+            max-width: 1500px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        .section-heading {
-            text-align: center;
-            margin-bottom: 2rem;
+
+        section {
+            padding: 100px 0;
         }
-        
-        .section-heading h2 {
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
             font-size: 2.5rem;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-        }
-        
-        .section-heading p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .btn {
+            margin-bottom: 15px;
+            color: var(--dark);
+            position: relative;
             display: inline-block;
+        }
+
+        .section-header h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 12px 28px;
-            border-radius: 50px;
-            text-decoration: none;
+            border-radius: var(--radius-xl);
             font-weight: 600;
-            transition: all 0.3s ease;
+            text-decoration: none;
+            transition: var(--transition);
             text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            gap: 8px;
         }
-        
+
         .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-md);
         }
-        
+
         .btn-primary:hover {
-            background-color: var(--dark-color);
             transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+            box-shadow: var(--shadow-lg);
         }
-        
+
         .btn-secondary {
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
+            background-color: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
-        
+
         .btn-secondary:hover {
-            background-color: var(--light-color);
+            background-color: var(--primary);
+            color: var(--white);
             transform: translateY(-3px);
         }
-        
-        /* Hero section styles */
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #f72585cc);
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
-            color: white;
-            padding: 100px 0 80px;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            color: var(--white);
+            padding: 120px 0 80px;
             position: relative;
             overflow: hidden;
         }
-        
+
+        .hero-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
         .hero-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 20px;
             position: relative;
             z-index: 2;
         }
-        
+
         .hero-content {
+            flex: 1;
             max-width: 600px;
         }
-        
+
         .hero-section h1 {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
             line-height: 1.2;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
         }
-        
+
         .hero-section p {
             font-size: 1.25rem;
-            margin-bottom: 2rem;
+            margin-bottom: 30px;
             opacity: 0.9;
             line-height: 1.7;
         }
-        
+
         .hero-image {
-            width: 45%;
+            flex: 1;
             position: relative;
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
         }
-        
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         .hero-image img {
-            width: 100%;
+            max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
         }
-        
-        .hero-badges {
+
+        .hero-buttons {
             display: flex;
             gap: 20px;
-            margin-top: 2.5rem;
+            margin-top: 30px;
+            flex-wrap: wrap;
         }
-        
-        .hero-badge {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 50px;
+
+        .hero-stats {
             display: flex;
-            align-items: center;
-            font-weight: 500;
-        }
-        
-        .hero-badge i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        /* Services section styles */
-        .services-section {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-top: 50px;
+            margin-top: 40px;
         }
-        
-        .service-card {
-            background-color: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 40px 30px;
-            border: 1px solid #f1f5f9;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-color);
-        }
-        
-        .service-icon {
-            margin-bottom: 25px;
-            width: 70px;
-            height: 70px;
-            border-radius: 15px;
+
+        .stat-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background-color: #f0f9ff;
-            color: var(--primary-color);
-            font-size: 2rem;
+            gap: 10px;
         }
-        
-        .service-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-            color: var(--dark-color);
-            font-weight: 700;
-        }
-        
-        .service-card p {
-            color: var(--text-light);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        
-        .service-link {
-            display: flex;
-            align-items: center;
-            color: var(--primary-color);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        
-        .service-link i {
-            margin-left: 5px;
-            transition: transform 0.2s ease;
-        }
-        
-        .service-link:hover i {
-            transform: translateX(5px);
-        }
-        
-        /* Features section styles */
-        .features-section {
-            padding: 100px 0;
-            background-color: #f8fafc;
-        }
-        
-        .features-container {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .features-image {
-            flex: 0 0 45%;
-        }
-        
-        .features-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .features-content {
-            flex: 0 0 50%;
-        }
-        
-        .features-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark-color);
-        }
-        
-        .features-list {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        
-        .feature-item {
-            margin-bottom: 25px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .feature-icon {
-            margin-right: 15px;
-            width: 40px;
-            height: 40px;
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--accent-color);
-            color: white;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .feature-content h3 {
-            margin: 0 0 8px;
             font-size: 1.25rem;
-            color: var(--dark-color);
         }
-        
-        .feature-content p {
-            margin: 0;
-            color: var(--text-light);
+
+        .stat-text span {
+            display: block;
+            font-weight: 700;
+            font-size: 1.5rem;
         }
-        
-        /* Templates section */
-        .templates-section {
-            padding: 100px 0;
-            background-color: white;
+
+        .stat-text small {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Features Section */
+        .features-section {
+            background-color: var(--white);
             position: relative;
         }
-        
-        .templates-header {
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--radius-md);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--gray-light);
             text-align: center;
-            margin-bottom: 50px;
         }
-        
-        .templates-header h2 {
-            font-size: 2.5rem;
-            color: var(--dark-color);
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
             margin-bottom: 15px;
+            color: var(--dark);
         }
-        
-        .templates-header p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto;
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.6;
         }
-        
+
+        /* Templates Section */
+        .templates-section {
+            background-color: var(--light);
+            position: relative;
+        }
+
+        .templates-container:hover .template-card {
+            transform: none !important;
+        }
+
         .templates-container {
             display: flex;
             overflow-x: auto;
             gap: 30px;
             padding: 20px 10px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+            transition: scroll-left 0.3s ease;
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-        
+
         .templates-container::-webkit-scrollbar {
             display: none;
         }
-        
+
         .template-card {
-            min-width: 280px;
-            max-width: 280px;
-            background-color: white;
-            border-radius: 16px;
+            min-width: 300px;
+            background-color: var(--white);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             scroll-snap-align: start;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--gray-light);
+            position: relative;
         }
-        
+
         .template-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-            border-color: var(--accent-color);
+            transform: scale(1.03);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
         }
-        
+
+        .template-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: var(--radius-xl);
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
         .template-image {
-            height: 380px;
+            height: 400px;
             background-size: cover;
             background-position: top center;
-            border-bottom: 1px solid #f1f5f9;
+            background-repeat: no-repeat;
+            position: relative;
         }
-        
+
+        .template-image:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .template-card:hover .template-image:after {
+            opacity: 1;
+        }
+
         .template-info {
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
-        
+
         .template-info h4 {
-            margin: 0 0 8px;
-            color: var(--dark-color);
-            font-size: 1.25rem;
+            margin: 0 0 5px;
+            color: var(--dark);
+            font-size: 1.3rem;
         }
-        
+
         .template-info p {
             margin: 0 0 15px;
-            color: var(--text-light);
-            font-size: 0.9rem;
+            color: var(--gray);
+            font-size: 0.95rem;
         }
-        
+
         .template-tags {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
             margin-bottom: 15px;
         }
-        
+
         .template-tag {
-            padding: 4px 10px;
-            background-color: #f1f5f9;
-            border-radius: 50px;
+            padding: 4px 12px;
+            background-color: var(--gray-light);
+            border-radius: var(--radius-xl);
             font-size: 0.75rem;
-            color: var(--text-dark);
+            color: var(--dark);
         }
-        
+
         .use-template-btn {
             display: block;
             text-align: center;
-            padding: 10px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 8px;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border-radius: var(--radius-sm);
             text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 10px;
         }
-        
+
         .use-template-btn:hover {
-            background-color: var(--dark-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
-        
+
         /* Scroll buttons */
         .scroll-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: white;
-            color: var(--primary-color);
+            background-color: var(--white);
+            color: var(--primary);
             border: none;
             border-radius: 50%;
             width: 50px;
@@ -436,15 +464,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
             z-index: 10;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .scroll-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow-lg);
         }
 
         .scroll-left {
@@ -454,196 +482,126 @@
         .scroll-right {
             right: 20px;
         }
-        
-        /* Scroll indicators */
-        .scroll-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 30px;
-        }
-        
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .indicator.active {
-            background-color: var(--primary-color);
-            width: 30px;
-            border-radius: 10px;
-        }
-        
-        /* Statistics section */
-        .stats-section {
-            padding: 80px 0;
-            background-color: var(--light-color);
-        }
-        
-        .stats-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .stat-box {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-            padding: 30px 20px;
-            background-color: white;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            line-height: 1;
-        }
-        
-        .stat-label {
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-        
-        /* Testimonials section */
+
+        /* Testimonials Section */
         .testimonials-section {
-            padding: 100px 0;
-            background-color: white;
+            background-color: var(--white);
         }
-        
+
         .testimonials-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            padding: 0 50px;
-        }
-        
-        .testimonial-slider {
-            display: flex;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            scroll-snap-type: x mandatory;
-        }
-        
-        .testimonial-slide {
-            min-width: 100%;
-            scroll-snap-align: start;
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            padding: 20px 0;
         }
-        
+
         .testimonial-card {
-            flex: 1;
-            background-color: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1f5f9;
+            background-color: var(--white);
+            border-radius: var(--radius-md);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-sm);
             position: relative;
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
         }
-        
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
         .testimonial-card:before {
             content: '"';
             position: absolute;
-            top: 10px;
+            top: 20px;
             left: 20px;
             font-size: 5rem;
-            color: #f1f5f9;
+            color: var(--gray-light);
             font-family: serif;
             line-height: 1;
             z-index: 0;
+            opacity: 0.5;
         }
-        
+
         .testimonial-content {
             position: relative;
             z-index: 1;
         }
-        
+
+        .testimonial-rating {
+            color: var(--warning);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
         .testimonial-text {
             font-size: 1.1rem;
             line-height: 1.7;
-            color: var(--text-dark);
-            margin-bottom: 20px;
+            color: var(--dark);
+            margin-bottom: 25px;
+            font-style: italic;
         }
-        
+
         .testimonial-author {
             display: flex;
             align-items: center;
         }
-        
+
         .author-image {
             width: 60px;
             height: 60px;
             border-radius: 50%;
             background-size: cover;
+            background-position: center;
             margin-right: 15px;
-            border: 3px solid #f1f5f9;
+            border: 3px solid var(--gray-light);
         }
-        
+
         .author-info h4 {
             margin: 0 0 5px;
-            color: var(--dark-color);
+            color: var(--dark);
             font-size: 1.1rem;
         }
-        
+
         .author-info p {
             margin: 0;
-            color: var(--text-light);
+            color: var(--gray);
             font-size: 0.9rem;
         }
-        
-        .testimonial-rating {
-            margin-top: 10px;
-            color: var(--warning-color);
-            font-size: 1.2rem;
-        }
-        
-        /* Pricing section */
+
+        /* Pricing Section */
         .pricing-section {
-            padding: 100px 0;
-            background-color: #f8fafc;
+            background-color: var(--light);
         }
-        
+
         .pricing-toggle {
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 40px 0;
         }
-        
+
         .toggle-label {
             font-size: 1.1rem;
             font-weight: 500;
-            color: var(--text-light);
+            color: var(--gray);
             cursor: pointer;
         }
-        
+
         .toggle-label.active {
-            color: var(--dark-color);
+            color: var(--dark);
+            font-weight: 600;
         }
-        
+
         .toggle-switch {
             position: relative;
             width: 60px;
             height: 30px;
             margin: 0 15px;
-            background-color: var(--primary-color);
+            background-color: var(--primary);
             border-radius: 30px;
             cursor: pointer;
         }
-        
+
         .toggle-switch:before {
             content: '';
             position: absolute;
@@ -651,600 +609,696 @@
             left: 3px;
             width: 24px;
             height: 24px;
-            background-color: white;
+            background-color: var(--white);
             border-radius: 50%;
             transition: transform 0.3s ease;
         }
-        
+
         .toggle-switch.annually:before {
             transform: translateX(30px);
         }
-        
-        .pricing-plans {
-            display: flex;
-            justify-content: center;
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex-wrap: wrap;
         }
-        
+
         .pricing-card {
-            flex: 1;
-            min-width: 300px;
-            max-width: 350px;
-            background-color: white;
-            border-radius: 16px;
+            background-color: var(--white);
+            border-radius: var(--radius-md);
             padding: 40px 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1f5f9;
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--gray-light);
             position: relative;
         }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-color);
-        }
-        
+
         .pricing-card.popular {
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(67, 97, 238, 0.1);
         }
-        
+
         .popular-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--accent);
+            color: var(--white);
             padding: 5px 15px;
-            border-radius: 50px;
+            border-radius: var(--radius-xl);
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
         .plan-name {
             font-size: 1.5rem;
-            color: var(--dark-color);
+            color: var(--dark);
             margin-bottom: 15px;
-            font-weight: 700;
         }
-        
+
         .plan-price {
             font-size: 2.5rem;
-            color: var(--dark-color);
-            margin-bottom: 20px;
-            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-weight: 700;
         }
-        
+
         .price-duration {
             font-size: 1rem;
-            color: var(--text-light);
-            font-weight: normal;
+            color: var(--gray);
+            margin-bottom: 20px;
         }
-        
+
         .plan-description {
-            color: var(--text-light);
+            color: var(--gray);
             margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
         }
-        
+
         .plan-features {
             list-style: none;
             padding: 0;
             margin: 0 0 30px;
         }
-        
+
         .plan-features li {
             padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
-            color: var(--text-dark);
+            border-bottom: 1px solid var(--gray-light);
+            color: var(--dark);
             display: flex;
             align-items: center;
+            gap: 10px;
         }
-        
+
         .plan-features li i {
-            color: var(--success-color);
-            margin-right: 10px;
+            color: var(--success);
         }
-        
+
         .plan-features li.unavailable {
-            color: var(--text-light);
+            color: var(--gray);
         }
-        
+
         .plan-features li.unavailable i {
-            color: #cbd5e0;
+            color: var(--gray-light);
         }
-        
+
         .choose-plan-btn {
             display: block;
             width: 100%;
             padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 1rem;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             text-align: center;
             text-decoration: none;
+            border: none;
         }
-        
+
         .choose-plan-btn:hover {
-            background-color: var(--dark-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
-        
+
         .pricing-card.popular .choose-plan-btn {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent), #f72585cc);
         }
-        
-        /* FAQ section */
-        .faq-section {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            margin-bottom: 20px;
-            border: 1px solid #f1f5f9;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .faq-question {
-            padding: 20px;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-color);
-            transition: all 0.3s ease;
-        }
-        
-        .faq-question:hover {
-            background-color: #f8fafc;
-        }
-        
-        .faq-question i {
-            margin-left: 10px;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-        
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-        }
-        
-        .faq-item.active .faq-answer {
-            padding: 0 20px 20px;
-            max-height: 500px;
-        }
-        
-        /* CTA section */
+
+        /* CTA Section */
         .cta-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
-            color: white;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            color: var(--white);
             text-align: center;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .cta-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
         .cta-container {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
-        
+
         .cta-section h2 {
             font-size: 2.8rem;
             margin-bottom: 20px;
-            font-weight: 800;
         }
-        
+
         .cta-section p {
             font-size: 1.2rem;
             margin-bottom: 40px;
             opacity: 0.9;
         }
-        
+
         .cta-buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
         }
-        
-        /* Responsive styles */
-        @media (max-width: 1200px) {
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
             .hero-container {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .hero-content {
                 max-width: 100%;
                 margin-bottom: 50px;
             }
-            
-            .hero-image {
-                width: 80%;
-            }
-            
-            .hero-badges {
+
+            .hero-buttons {
                 justify-content: center;
             }
-            
-            .features-container {
-                flex-direction: column;
-                padding: 0 20px;
-            }
-            
-            .features-image {
-                flex: 0 0 100%;
-                margin-bottom: 50px;
-            }
-            
-            .features-content {
-                flex: 0 0 100%;
-            }
-            
-            .testimonial-slide {
-                flex-direction: column;
-            }
-        }
-        
-        /* Add this to your existing styles */
-@media (max-width: 768px) {
-    /* Fix navbar overlap */
-    body {
-        padding-top: 60px; /* Add space for fixed navbar */
-    }
-    
-    /* Hero section adjustments */
-    .hero-section {
-        padding: 60px 0 40px;
-    }
-    
-    .hero-section h1 {
-        font-size: 2rem;
-    }
-    
-    .hero-section p {
-        font-size: 1rem;
-    }
-    
-    .hero-badges {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    /* Services grid adjustment */
-    .services-grid {
-        grid-template-columns: 1fr;
-        max-width: 100%;
-    }
-    
-    /* Features section */
-    .features-container {
-        padding: 0 15px;
-    }
-    
-    .features-image {
-        margin-bottom: 30px;
-    }
-    
-    /* Stats section */
-    .stats-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .stat-box {
-        width: 100%;
-        max-width: 300px;
-        margin-bottom: 15px;
-    }
-    
-    /* CTA section */
-    .cta-section h2 {
-        font-size: 2rem;
-    }
-    
-    .cta-section p {
-        font-size: 1rem;
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .btn {
-        padding: 10px 20px;
-    }
-    
-    /* Section padding reduction */
-    .services-section,
-    .features-section,
-    .templates-section,
-    .stats-section,
-    .testimonials-section,
-    .pricing-section,
-    .faq-section,
-    .cta-section {
-        padding: 60px 0;
-    }
-    
-    /* Section headings */
-    .section-heading h2 {
-        font-size: 1.8rem;
-    }
-    
-    .section-heading p {
-        font-size: 1rem;
-    }
-}
 
-    @media (max-width: 480px) {
-        /* Further adjustments for very small screens */
-        .hero-section h1 {
-            font-size: 1.8rem;
+            .hero-stats {
+                justify-content: center;
+            }
+
+            section {
+                padding: 80px 0;
+            }
         }
-        
-        .hero-buttons {
-            flex-direction: column;
-            gap: 10px;
+
+        @media (max-width: 768px) {
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .cta-section p {
+                font-size: 1rem;
+            }
+
+            .scroll-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
         }
-        
-        .btn {
-            width: 100%;
+
+        @media (max-width: 480px) {
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            section {
+                padding: 60px 0;
+            }
         }
-        
-        .features-content h2 {
-            font-size: 1.8rem;
-        }
-        
-        .feature-item {
-            flex-direction: column;
-        }
-        
-        .feature-icon {
-            margin-bottom: 10px;
-        }
-    }
-    
     </style>
 </head>
 <body>
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="hero-container">
+        <div class="container hero-container">
             <div class="hero-content">
-                <h1>Your Complete Career Development Solution</h1>
-                <p>Build stunning resumes, compelling cover letters, professional portfolios, and prepare for interviews—all in one powerful platform. Start your success journey today.</p>
+                <h1>Create Cover Letters That Get Interviews</h1>
+                <p>Stand out from other applicants with professionally crafted cover letters. Our easy-to-use builder helps you highlight your qualifications and showcase your enthusiasm for the role.</p>
                 <div class="hero-buttons">
-                    <a href="login.php" class="btn btn-primary">Get Started for Free</a>
-                    <a href="login.php" class="btn btn-secondary">View Templates</a>
+                    <a href="personal.php" class="btn btn-primary">
+                        <i class="fas fa-pencil-alt"></i> Write My Cover Letter
+                    </a>
+                    <a href="#templates" class="btn btn-secondary">
+                        <i class="fas fa-eye"></i> View Templates
+                    </a>
                 </div>
-                <div class="hero-badges">
-                    <div class="hero-badge">
-                        <i class="fas fa-users"></i>
-                        <span>50,000+ Users</span>
-                    </div>
-                    <div class="hero-badge">
-                        <i class="fas fa-star"></i>
-                        <span>4.9/5 Rating</span>
-                    </div>
-                </div>
+              
             </div>
             <div class="hero-image">
-                <img src="Images/1.avif" alt="Resume Forge Platform Preview">
+                <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Professional Cover Letter Example">
             </div>
         </div>
     </section>
-    
-    <!-- Services Section -->
-    <section class="services-section" id="services-section">
+
+    <!-- Features Section -->
+    <section class="features-section">
         <div class="container">
-            <div class="section-heading">
-                <h2> Career Services</h2>
-                <p>Everything you need for your professional journey in one integrated platform</p>
+            <div class="section-header">
+                <h2>Why CoverLetter Pro?</h2>
+                <p>We provide everything you need to create a cover letter that gets you noticed by employers</p>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-file-alt"></i>
+            <div class="features-grid">
+            
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bullseye"></i>
                     </div>
-                    <h3>Resume Builder</h3>
-                    <p>Create professional, ATS-friendly resumes that highlight your skills and experience. Choose from dozens of expert-designed templates.</p>
-                    <a href="login.php" class="service-link">Create Resume <i class="fas fa-arrow-right"></i></a>
+                    <h3>Job-Targeted Content</h3>
+                    <p>Templates designed to address specific job requirements and highlight relevant qualifications.</p>
                 </div>
                 
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-envelope-open-text"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <h3>Cover Letter Builder</h3>
-                    <p>Craft compelling cover letters that complement your resume and demonstrate your value to potential employers.</p>
-                    <a href="login.php" class="service-link">Write Cover Letter <i class="fas fa-arrow-right"></i></a>
+                    <h3>AI Writing Assistant</h3>
+                    <p>Get intelligent suggestions to improve your letter's content and make a stronger impression.</p>
                 </div>
                 
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-laptop-code"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
                     </div>
-                    <h3>Portfolio Website</h3>
-                    <p>Showcase your work with a personalized portfolio website. Perfect for creative professionals and freelancers.</p>
-                    <a href="login.php" class="service-link">Build Portfolio <i class="fas fa-arrow-right"></i></a>
+                    <h3>Privacy Focused</h3>
+                    <p>Your data stays yours. Download and delete your cover letters anytime with one click.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates Section -->
+    <section class="templates-section" id="templates">
+        <div class="container">
+            <div class="section-header">
+                <h2>Professional Templates</h2>
+                <p>Choose from our collection of expertly designed cover letter templates for every industry</p>
+            </div>
+            
+            <button class="scroll-btn scroll-left"><i class="fas fa-chevron-left"></i></button>
+            <button class="scroll-btn scroll-right"><i class="fas fa-chevron-right"></i></button>
+            
+            <div class="templates-container">
+                <div class="template-card">
+                    <div class="template-badge">Most Popular</div>
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1586287011575-a2310347ca9e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Professional Standard</h4>
+                        <p>Traditional format perfect for corporate environments</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Corporate</span>
+                            <span class="template-tag">Traditional</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
                 </div>
                 
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-comments"></i>
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Modern Executive</h4>
+                        <p>Sophisticated layout for senior positions</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Leadership</span>
+                            <span class="template-tag">Executive</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
                     </div>
-                    <h3>Interview Preparation</h3>
-                    <p>Practice with AI-powered interview simulations and get real-time feedback to improve your interview skills.</p>
-                    <a href="login.php" class="service-link">Prepare for Interviews <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="template-card">
+                    <div class="template-badge">New</div>
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Creative Impact</h4>
+                        <p>For designers, artists, and creative professionals</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Creative</span>
+                            <span class="template-tag">Bold</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+                
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Academic Formal</h4>
+                        <p>Perfect for researchers and academic professionals</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Academic</span>
+                            <span class="template-tag">Formal</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+                
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Tech Specialist</h4>
+                        <p>Tailored for IT and tech industry positions</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Technical</span>
+                            <span class="template-tag">Modern</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
                 </div>
 
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-briefcase"></i>
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Healthcare Professional</h4>
+                        <p>Specialized for medical and healthcare roles</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Medical</span>
+                            <span class="template-tag">Professional</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
                     </div>
-                    <h3>Job Portal</h3>
-                    <p>Discover and apply for relevant job openings. Leverage AI-powered tools to enhance your application and interview readiness.</p>
-                    <a href="login.php" class="service-link">Apply for Job <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Career Change</h4>
+                        <p>Designed to highlight transferable skills</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Transition</span>
+                            <span class="template-tag">Skills-Focused</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Minimalist</h4>
+                        <p>Clean, concise format focused on content</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Clean</span>
+                            <span class="template-tag">Simple</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>Recent Graduate</h4>
+                        <p>Optimized for new professionals with limited experience</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Entry-Level</span>
+                            <span class="template-tag">Graduate</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="template-info">
+                        <h4>International Application</h4>
+                        <p>Designed for overseas job applications</p>
+                        <div class="template-tags">
+                            <span class="template-tag">Global</span>
+                            <span class="template-tag">International</span>
+                        </div>
+                        <a href="personal.php" class="use-template-btn">Use This Template</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Success Stories</h2>
+                <p>See how our cover letters have helped job seekers land interviews at top companies</p>
+            </div>
+            
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"I was applying to jobs for months with no response. After using CoverLetter Pro, I crafted a personalized letter that showcased my skills perfectly. I received interview requests from 4 out of 5 applications!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg');"></div>
+                            <div class="author-info">
+                                <h4>Emily Chen</h4>
+                                <p>Project Manager at Microsoft</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"As a career changer, I struggled to explain my transferable skills until I used CoverLetter Pro. The templates helped me articulate my value proposition clearly. I landed my dream job within three weeks!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                            <div class="author-info">
+                                <h4>James Wilson</h4>
+                                <p>Product Manager at Salesforce</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"The AI suggestions helped me tailor each cover letter to specific job descriptions. My interview rate immediately increased by 80%. The hiring manager even complimented my letter during the interview!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                            <div class="author-info">
+                                <h4>Marcus Johnson</h4>
+                                <p>Digital Marketing Specialist at Amazon</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="features-container">
-            <div class="features-image">
-                <img src="Images/2.avif" alt="Resume Forge Features">
-            </div>
-            <div class="features-content">
-                <h2>Why Choose GecnoGuru?</h2>
-                <ul class="features-list">
-                    <li class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3>ATS-Optimized Templates</h3>
-                            <p>Our resume templates are designed to pass through Applicant Tracking Systems with ease, ensuring your application gets seen.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3>AI-Powered Content Suggestions</h3>
-                            <p>Get smart recommendations for skills, achievements, and phrases that make your resume stand out.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3>All-in-One Platform</h3>
-                            <p>Manage your entire job search process from a single dashboard with integrated tools for every step.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3>Expert Career Resources</h3>
-                            <p>Access guides, tips, and best practices from industry professionals to improve your job hunting strategy.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Statistics Section -->
-    <section class="stats-section">
-        <div class="stats-container">
-            <div class="stat-box">
-                <div class="stat-number">50,000+</div>
-                <div class="stat-label">Active Users</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">87%</div>
-                <div class="stat-label">Interview Success Rate</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">150+</div>
-                <div class="stat-label">Resume Templates</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">4.9/5</div>
-                <div class="stat-label">Average Rating</div>
-            </div>
-        </div>
-    </section>
-    
+
     <!-- CTA Section -->
     <section class="cta-section">
-        <div class="cta-container">
-            <h2>Ready to Launch Your Career?</h2>
-            <p>Create your professional resume in minutes and take the first step toward your dream job.</p>
+        <div class="container cta-container">
+            <h2>Ready to Write a Cover Letter That Gets Noticed?</h2>
+            <p>Join thousands of job seekers who landed interviews with CoverLetter Pro</p>
             <div class="cta-buttons">
-                <a href="login.php" class="btn btn-primary">Get Started Now</a>
-                <a href="#features" class="btn btn-secondary">Learn More</a>
+                <a href="personal.php" class="btn btn-accent">
+                    <i class="fas fa-pencil-alt"></i> Start Writing - It's Free
+                </a>
+                <a href="#templates" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Browse Templates
+                </a>
             </div>
         </div>
     </section>
-    
-    <!-- Footer -->
-    <footer id="footer">
-        <?php include('footer.php'); ?>
-    </footer>
 
-    <!-- JavaScript for template slider -->
+
+
     <script>
-        // Template slider functionality
-        const templatesContainer = document.querySelector('.templates-container');
-        const scrollLeftBtn = document.querySelector('.scroll-left');
-        const scrollRightBtn = document.querySelector('.scroll-right');
-        const indicators = document.querySelectorAll('.indicator');
-        let currentIndex = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    // Template slider elements
+    const templatesContainer = document.querySelector('.templates-container');
+    const scrollLeftBtn = document.querySelector('.scroll-left');
+    const scrollRightBtn = document.querySelector('.scroll-right');
+    const templateCards = document.querySelectorAll('.template-card');
+    const useTemplateBtns = document.querySelectorAll('.use-template-btn');
+    
+    // Auto-scroll settings
+    let autoScrollInterval;
+    const scrollSpeed = 1; // pixels per interval (lower = slower)
+    const scrollDelay = 30; // milliseconds between scrolls
+    const scrollResetDelay = 3000; // 3 seconds delay before restarting after manual scroll
+
+    // Initialize template slider
+    function initTemplateSlider() {
+        // Set up scroll buttons
+        updateScrollButtons();
         
+        // Start auto-scroll
+        startAutoScroll();
+        
+        // Set up event listeners
+        setupEventListeners();
+    }
+
+    // Auto-scroll functions
+    function startAutoScroll() {
+        stopAutoScroll(); // Clear any existing interval
+        
+        autoScrollInterval = setInterval(() => {
+            const maxScroll = templatesContainer.scrollWidth - templatesContainer.clientWidth;
+            
+            if (templatesContainer.scrollLeft >= maxScroll - 10) {
+                // Reached end - reset to start
+                templatesContainer.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Normal scroll
+                templatesContainer.scrollBy({
+                    left: scrollSpeed,
+                    behavior: 'smooth'
+                });
+            }
+            
+            updateScrollButtons();
+        }, scrollDelay);
+    }
+
+    function stopAutoScroll() {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+    }
+
+    function updateScrollButtons() {
+        const scrollLeft = templatesContainer.scrollLeft;
+        const maxScroll = templatesContainer.scrollWidth - templatesContainer.clientWidth;
+        
+        scrollLeftBtn.style.display = scrollLeft > 0 ? 'flex' : 'none';
+        scrollRightBtn.style.display = scrollLeft < maxScroll - 10 ? 'flex' : 'none';
+    }
+
+    // Event listeners setup
+    function setupEventListeners() {
+        // Manual scroll buttons
         scrollLeftBtn.addEventListener('click', () => {
-            currentIndex = Math.max(currentIndex - 1, 0);
-            updateSlider();
+            templatesContainer.scrollBy({
+                left: -300,
+                behavior: 'smooth'
+            });
         });
         
         scrollRightBtn.addEventListener('click', () => {
-            currentIndex = Math.min(currentIndex + 1, 2);
-            updateSlider();
-        });
-        
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentIndex = index;
-                updateSlider();
-            });
-        });
-        
-        function updateSlider() {
-            const scrollAmount = templatesContainer.clientWidth * currentIndex;
-            templatesContainer.scrollTo({
-                left: scrollAmount,
+            templatesContainer.scrollBy({
+                left: 300,
                 behavior: 'smooth'
             });
+        });
+        
+        // Pause auto-scroll on interaction
+        templatesContainer.addEventListener('mouseenter', stopAutoScroll);
+        templatesContainer.addEventListener('mouseleave', () => {
+            if (!autoScrollInterval) {
+                startAutoScroll();
+            }
+        });
+        
+        // Handle manual scrolling
+        templatesContainer.addEventListener('scroll', () => {
+            stopAutoScroll();
+            updateScrollButtons();
             
-            indicators.forEach((indicator, index) => {
-                if (index === currentIndex) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
+            // Restart auto-scroll after delay if not hovering
+            setTimeout(() => {
+                if (!templatesContainer.matches(':hover')) {
+                    startAutoScroll();
                 }
+            }, scrollResetDelay);
+        });
+        
+        // Template selection
+        templateCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.classList.contains('use-template-btn') || 
+                    e.target.closest('.use-template-btn')) {
+                    return;
+                }
+                
+                const templateName = card.querySelector('h4').textContent;
+                localStorage.setItem('selectedTemplate', templateName);
+                // window.location.href = 'personal.php';
             });
-        }
-    </script>
-</body>
-</html>
+        });
+        
+        useTemplateBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const templateName = this.closest('.template-card').querySelector('h4').textContent;
+                localStorage.setItem('selectedTemplate', templateName);
+                // window.location.href = 'personal.php';
+            });
+        });
+    }
+
+    // Initialize the template slider
+    initTemplateSlider();
+});
+</script>
+
+    <?php
+    include ('footer.php');
+}
+    ?>
