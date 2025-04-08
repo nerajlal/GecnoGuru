@@ -1,7 +1,14 @@
 <?php
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Start session before any output
+session_start();
+
+// Include files
 include('navbar1.php');
 include('dbconnect.php');
-session_start();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
@@ -112,7 +119,6 @@ $conn->close();
     <title>User Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        
         .profile-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -147,18 +153,16 @@ $conn->close();
 
         /* Then set up the grid for everything else */
         .sections-grid {
-            column-count: 2;
-            column-gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
             width: 100%;
         }
 
         /* Style for all sections */
         .section {
-            display: inline-block;
             width: 100%;
             margin-bottom: 25px;
-            break-inside: avoid;
-            page-break-inside: avoid;
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -176,6 +180,7 @@ $conn->close();
             background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
             margin-bottom: 25px;
             width: 100%;
+            grid-column: 1 / -1;
         }
 
         .section-title {
@@ -335,8 +340,12 @@ $conn->close();
 <body>
     <div class="profile-container">
         <div class="profile-header">
-            <?php $personal = $personal_details[0]; ?>
-            <h1><?php echo htmlspecialchars($personal['name']); ?>'s Profile</h1>
+            <?php if (!empty($personal_details) && isset($personal_details[0])): ?>
+                <?php $personal = $personal_details[0]; ?>
+                <h1><?php echo htmlspecialchars($personal['name']); ?>'s Profile</h1>
+            <?php else: ?>
+                <h1>User Profile</h1>
+            <?php endif; ?>
             <p>Your complete professional portfolio at a glance</p>
         </div>
 
@@ -348,7 +357,7 @@ $conn->close();
                     <a href="upersonal.php" class="edit-btn">Edit</a>
                 </div>
                 
-                <?php if (!empty($personal_details)): ?>
+                <?php if (!empty($personal_details) && isset($personal_details[0])): ?>
                     <?php $personal = $personal_details[0]; ?>
                     <div class="info-grid">
                         <div class="info-group">

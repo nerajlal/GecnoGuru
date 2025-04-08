@@ -1,23 +1,19 @@
 <?php
-include ('navbar1.php');
-include ('ucontroller.php');
+// Start the session first
+session_start();
 
 // Ensure user is logged in
 if (!isset($_SESSION['email'])) {
     header("Location: index.php");
     exit();
 }
+
+// Get user email
+$user_email = $_SESSION['email'];
+
+// Include the navbar after session check
+include('navbar1.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Experience</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
     <div class="form-container">
         <form action="ucontroller.php" method="POST" id="experienceForm">
             <div id="experience-container">
@@ -151,8 +147,6 @@ if (!isset($_SESSION['email'])) {
         });
     });
     </script>
-</body>
-</html>
 
 <?php
     include('footer.php');

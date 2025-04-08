@@ -39,7 +39,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            z-index: 1001; /* Ensure this is present */
+            z-index: 1001;
         }
         
         .navbar .logo a {
@@ -95,7 +95,7 @@
             background-color: var(--dropdown-bg);
             min-width: 180px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            z-index: 1002; /* Increased from 1 to 1100 */
+            z-index: 1002;
             top: 100%;
             left: 0px;
             border-radius: 4px;
@@ -204,7 +204,6 @@
             }
         }
     </style>
-    
 </head>
 <body>
     <nav class="navbar">
@@ -321,5 +320,3 @@
             initMenu();
         });
     </script>
-</body>
-</html>
