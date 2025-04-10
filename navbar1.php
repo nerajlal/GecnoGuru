@@ -229,9 +229,9 @@
             </li> 
             <li><a href="Resume/index.php">Resume Builder</a></li> 
             <li><a href="Cover/index.php">Cover Letter Builder</a></li> 
-            <li><a href="#.php">Portfolio Builder</a></li> 
-            <li><a href="#.php">Interview Preparation</a></li> 
-            <li><a href="#.php">Job Portal</a></li> 
+            <li><a href="willbe.php">Portfolio Builder</a></li> 
+            <li><a href="willbe.php">Interview Preparation</a></li> 
+            <li><a href="willbe.php">Job Portal</a></li> 
             <li><a href="profile.php">My Profile</a></li> 
             <li><a href="logout.php">LogOut</a></li> 
         </ul>
