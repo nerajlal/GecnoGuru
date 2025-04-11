@@ -151,37 +151,40 @@ $conn->close();
             margin-bottom: 25px;
         }
 
-        /* Then set up the grid for everything else */
-        .sections-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            width: 100%;
-        }
 
-        /* Style for all sections */
-        .section {
-            width: 100%;
-            margin-bottom: 25px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
+/* Then set up the grid for everything else */
+.sections-grid {
+    column-count: 2;
+    column-gap: 25px;
+    width: 100%;
+}
 
-        .section:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        }
+/* Style for all sections */
+.section {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 25px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    transition: all 0.3s ease;
+}
 
-        /* Special style for personal section */
-        .section.personal {
-            background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
-            margin-bottom: 25px;
-            width: 100%;
-            grid-column: 1 / -1;
-        }
+.section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Special style for personal section */
+.section.personal {
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+    margin-bottom: 25px;
+    width: 100%;
+}
+        
 
         .section-title {
             color: #2c3e50;
@@ -309,32 +312,83 @@ $conn->close();
         }
 
         @media (max-width: 992px) {
-            .sections-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    .sections-grid {
+        column-count: 1;
+    }
+}
 
-        @media (max-width: 768px) {
-            .profile-container {
-                padding: 15px;
-            }
-            
-            .profile-header {
-                padding: 20px;
-            }
-            
-            .profile-header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .section {
-                padding: 20px;
-            }
-        }
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px;
+    }
+    
+    .profile-header {
+        padding: 15px;
+    }
+    
+    .profile-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .profile-header p {
+        font-size: 0.9rem;
+    }
+    
+    .sections-grid {
+        column-count: 1;
+        column-gap: 0;
+    }
+    
+    .section {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 15px;
+        break-inside: avoid;
+    }
+    
+    .section-title h2 {
+        font-size: 1.2rem;
+    }
+    
+    .edit-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .education-item, 
+    .experience-item, 
+    .project-item, 
+    .skill-item,
+    .hobby-item, 
+    .achievement-item {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .info-label, 
+    .info-value {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.1rem;
+    }
+    
+    .section {
+        padding: 12px;
+    }
+}
     </style>
 </head>
 <body>
@@ -349,12 +403,12 @@ $conn->close();
             <p>Your complete professional portfolio at a glance</p>
         </div>
 
-        <div class="sections-grid">
+        
             <!-- Personal Details Section -->
             <div class="section personal">
                 <div class="section-title">
                     <h2><i class="fas fa-user"></i> Personal Details</h2>
-                    <a href="upersonal.php" class="edit-btn">Edit</a>
+                    <a href="upersonal.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($personal_details) && isset($personal_details[0])): ?>
@@ -416,12 +470,12 @@ $conn->close();
                     <div class="empty-message">No personal details found. <a href="upersonal.php">Add your information</a></div>
                 <?php endif; ?>
             </div>
-
+            <div class="sections-grid">
             <!-- Education Section -->
             <div class="section">
                 <div class="section-title">
                     <h2><i class="fas fa-graduation-cap"></i> Education</h2>
-                    <a href="ueducation.php" class="edit-btn">Edit</a>
+                    <a href="ueducation.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($education_details)): ?>
@@ -457,7 +511,7 @@ $conn->close();
             <div class="section">
                 <div class="section-title">
                     <h2><i class="fas fa-briefcase"></i> Experience</h2>
-                    <a href="uexperience.php" class="edit-btn">Edit</a>
+                    <a href="uexperience.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($experience_details)): ?>
@@ -503,7 +557,7 @@ $conn->close();
             <div class="section">
                 <div class="section-title">
                     <h2><i class="fas fa-project-diagram"></i> Projects</h2>
-                    <a href="uprojects.php" class="edit-btn">Edit</a>
+                    <a href="uprojects.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($projects_details)): ?>
@@ -549,47 +603,64 @@ $conn->close();
                 <?php endif; ?>
             </div>
 
-            <!-- Skills Section -->
-            <div class="section">
-                <div class="section-title">
-                    <h2><i class="fas fa-tools"></i> Skills</h2>
-                    <a href="uskills.php" class="edit-btn">Edit</a>
-                </div>
-                
-                <?php if (!empty($skills_details)): ?>
-                    <?php foreach ($skills_details as $skill): ?>
-                        <div class="skill-item">
-                            <div class="info-group">
-                                <div class="info-label">Skill</div>
-                                <div class="info-value"><?php echo htmlspecialchars($skill['skill']) ?></div>
-                            </div>
-                            
-                            <div class="info-group">
-                                <div class="info-label">Proficiency</div>
-                                <div class="skill-proficiency">
-                                    <div class="info-value"><?php echo htmlspecialchars($skill['proficiency']) ?>%</div>
-                                    <div class="skill-progress">
-                                        <div class="progress-bar" style="width: <?php echo $skill['proficiency'] ?>%"></div>
+                 <!-- Skills Section -->
+                 <div class="section">
+                    <div class="section-title">
+                        <h2><i class="fas fa-tools"></i> Skills</h2>
+                        <a href="uskills.php" class="edit-btn">Add New</a>
+                    </div>
+                    <?php if (!empty($skills_details)): ?>
+                        <?php 
+                            // Map proficiency levels to percentages
+                            $proficiency_map = array(
+                                'beginner' => 25,
+                                'intermediate' => 50,
+                                'advanced' => 75,
+                                'expert' => 100
+                            );
+                        ?>
+
+                        <?php foreach ($skills_details as $skill): ?>
+                            <?php
+                                // Convert the proficiency text to lowercase and map to percentage
+                                $proficiency_key = strtolower(trim($skill['proficiency']));
+                                $proficiency_value = isset($proficiency_map[$proficiency_key]) ? $proficiency_map[$proficiency_key] : 0;
+                            ?>
+
+                            <div class="skill-item">
+                                <div class="info-group">
+                                    <div class="info-label">Skill</div>
+                                    <div class="info-value"><?php echo htmlspecialchars($skill['skill']); ?></div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Proficiency</div>
+                                    <div class="skill-proficiency">
+                                        <div class="info-value"><?php echo ucfirst($proficiency_key) . " ({$proficiency_value}%)"; ?></div>
+                                        <div class="skill-progress" style="background: #eee; border-radius: 4px; height: 8px; overflow: hidden;">
+                                            <div class="progress-bar" style="width: <?php echo $proficiency_value; ?>%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Description</div>
+                                    <div class="info-value">
+                                        <?php echo !empty($skill['skill_description']) ? nl2br(htmlspecialchars($skill['skill_description'])) : 'No description'; ?>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="info-group">
-                                <div class="info-label">Description</div>
-                                <div class="info-value"><?php echo !empty($skill['skill_description']) ? nl2br(htmlspecialchars($skill['skill_description'])) : 'No description' ?></div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="empty-message">No skills found. <a href="uskills.php">Add your skills</a></div>
-                <?php endif; ?>
-            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-message">No skills found. <a href="uskills.php">Add your skills</a></div>
+                    <?php endif; ?>
+                </div>
 
             <!-- Hobbies Section -->
             <div class="section">
                 <div class="section-title">
                     <h2><i class="fas fa-heart"></i> Hobbies</h2>
-                    <a href="uhobbies.php" class="edit-btn">Edit</a>
+                    <a href="uhobbies.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($hobbies_details)): ?>
@@ -615,7 +686,7 @@ $conn->close();
             <div class="section">
                 <div class="section-title">
                     <h2><i class="fas fa-trophy"></i> Achievements</h2>
-                    <a href="uachievements.php" class="edit-btn">Edit</a>
+                    <a href="uachievements.php" class="edit-btn">Add New</a>
                 </div>
                 
                 <?php if (!empty($achievements_details)): ?>
@@ -647,8 +718,8 @@ $conn->close();
                 <?php endif; ?>
             </div>
         </div>
-
+        </div>
         <?php include('footer.php'); ?>
-    </div>
+    
 </body>
 </html>
